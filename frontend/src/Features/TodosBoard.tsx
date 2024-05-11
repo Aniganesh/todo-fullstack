@@ -55,12 +55,12 @@ const TodoItem: FC<DNDItemProps<Todo>> = ({
   ...props
 }) => {
   return (
-    <div
-      {...props}
-      ref={innerRef}
-      className={clsx({ "bg-zinc-100": snapshot.isDragging })}
-    >
-      <TodoCard {...todo} key={todo.id} />
+    <div {...props} ref={innerRef}>
+      <TodoCard
+        {...todo}
+        className={clsx({ "bg-zinc-100": snapshot.isDragging })}
+        key={todo.id}
+      />
     </div>
   );
 };
