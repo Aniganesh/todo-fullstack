@@ -1,0 +1,19 @@
+FROM node:20 AS base
+
+# CONFIGURE PNPM STUFF
+ENV PNPM_HOME="/pnpm"
+
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack enable
+
+# SETUP WORKDIR AND BUILD
+
+WORKDIR /app
+
+COPY . .
+
+RUN pnpm install
+
+# RUN in dev mode
+CMD [ "pnpm", "run", "start:dev" ]
