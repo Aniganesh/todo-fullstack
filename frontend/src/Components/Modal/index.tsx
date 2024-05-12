@@ -78,14 +78,14 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
       )}
     >
       <div
-        className="absolute top-0 bottom-0 left-0 right-0 bg-primary-light/50"
+        className="absolute top-0 bottom-0 left-0 right-0 bg-gray-400/10 backdrop-blur-sm"
         onClick={closeOnBgClick ? handleClose : undefined}
       />
       {showCloseButton && (
         <Button {...closeButtonProps}>
-          <i className="fa-solid fa-xmark"></i>
+          <i className="fa-solid fa-xmark text-4xl"></i>
         </Button>
-      )}	
+      )}
       <div
         className={
           "content-container absolute top-0 bottom-0 left-0 right-0 lg:max-w-4xl md:max-w-2xl h-fit bg-primary-light rounded-xl shadow-sm m-auto md:max-h-[80vh] max-h-screen max-sm:h-full overflow-y-auto"

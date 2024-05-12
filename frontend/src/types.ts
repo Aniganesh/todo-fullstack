@@ -4,3 +4,8 @@ export interface Todo {
   description: string;
   status: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+}
