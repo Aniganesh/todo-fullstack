@@ -13,6 +13,13 @@ const TodosBoard: FC<TodosBoardProps> = () => {
 
   return (
     <div className="flex gap-3 flex-wrap h-full py-4">
+      {Object.entries(groupedTodos).length === 0 && (
+        <div className="bg-gray-100 flex h-full w-full flex-1 justify-center items-center rounded-md">
+          <div className="text-center text-2xl text-gray-500">
+            No todos added
+          </div>
+        </div>
+      )}
       <DndBoard<Todo>
         boardData={groupedTodos}
         onBoardUpdate={setGroupedTodos}
