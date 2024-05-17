@@ -8,17 +8,21 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodo, UpdateTodo } from 'src/dtos/todo';
+import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('todos')
+@UseGuards(JWTAuthGuard)
 export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  public async getTodos() {
-    return this.todosService.getAll();
+  public async getTodos(@Req() req) {
+    return this.todosService.getAllForUser(req._user.id);
   }
 
   @Get(':id')
@@ -30,8 +34,8 @@ export class TodosController {
   }
 
   @Post()
-  public async postTodos(@Body() todo: CreateTodo) {
-    return this.todosService.createOne(todo);
+  public async postTodos(@Req() req, @Body() todo: CreateTodo) {
+    return this.todosService.createOne({ ...todo, user: req._user.id });
   }
 
   @Patch()

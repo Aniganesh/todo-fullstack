@@ -30,4 +30,14 @@ export class AuthService {
       }),
     };
   }
+
+  verify(accessToken: string) {
+    const fixedAccessToken = accessToken.replace('Bearer ', '');
+    const decoded = this.jwtService.verify(fixedAccessToken, {
+      secret: process.env.JWT_SECRET,
+    });
+    const user = this.usersService.findByEmail(decoded.email);
+    if (!user) throw new Error('User not found');
+    return user;
+  }
 }

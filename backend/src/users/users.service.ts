@@ -12,15 +12,20 @@ export class UsersService {
     return this.repo.findOne({ where: { id } });
   }
 
-  public async findByEmail(email: string, _includePassword = true) {
-    return this.repo
+  public async findByEmail(email: string, includePassword = false) {
+    const query = this.repo
       .createQueryBuilder()
       .select('user')
-      .where({ email })
-      .addSelect('password')
-      .getOne();
+      .where({ email });
+
+    if (includePassword) {
+      query.addSelect('password');
+    }
+
+    return query.getOne();
   }
-  public async createUser(userDto: CreateUserDto) {
+
+  public async create(userDto: CreateUserDto) {
     const user = this.repo.create(userDto);
     return this.repo.save(user);
   }
