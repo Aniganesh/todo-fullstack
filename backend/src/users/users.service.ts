@@ -6,27 +6,28 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(Users) private repo: Repository<Users>) {}
+  constructor(@InjectRepository(Users) private userRepo: Repository<Users>) {}
 
   public async findOne(id: string) {
-    return this.repo.findOne({ where: { id } });
+    return this.userRepo.findOne({ where: { id } });
   }
 
   public async findByEmail(email: string, includePassword = false) {
-    const query = this.repo
-      .createQueryBuilder()
-      .select('user')
-      .where({ email });
+    const query = this.userRepo
+      .createQueryBuilder('users')
+      .select('users')
+      .where(`users.email= :email`, { email });
 
     if (includePassword) {
-      query.addSelect('password');
+      query.addSelect('users.password');
     }
 
-    return query.getOne();
+    const res = await query.getOne();
+    return res;
   }
 
   public async create(userDto: CreateUserDto) {
-    const user = this.repo.create(userDto);
-    return this.repo.save(user);
+    const user = this.userRepo.create(userDto);
+    return this.userRepo.save(user);
   }
 }

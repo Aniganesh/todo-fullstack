@@ -12,7 +12,7 @@ export class TodosService {
   ) {}
 
   public async getAllForUser(user: Users) {
-    return this.repo.find({ where: { user } });
+    return this.repo.find({ where: { user: { id: user.id } } });
   }
 
   public async getAll() {

@@ -22,7 +22,7 @@ export class TodosController {
 
   @Get()
   public async getTodos(@Req() req) {
-    return this.todosService.getAllForUser(req._user.id);
+    return this.todosService.getAllForUser(req.user);
   }
 
   @Get(':id')
@@ -35,7 +35,7 @@ export class TodosController {
 
   @Post()
   public async postTodos(@Req() req, @Body() todo: CreateTodo) {
-    return this.todosService.createOne({ ...todo, user: req._user.id });
+    return this.todosService.createOne({ ...todo, user: req.user.id });
   }
 
   @Patch()

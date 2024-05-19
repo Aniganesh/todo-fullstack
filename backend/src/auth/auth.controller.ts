@@ -1,24 +1,33 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { CreateUserDto } from 'src/dtos/user';
+import { LocalAuthGuard } from 'src/guards/local.guard';
 import { UsersService } from 'src/users/users.service';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
-  @Get('/email/:email')
-  @UseGuards(AuthGuard('jwt'))
-  async getUserByEmail(@Param('email') email: string) {
-    return await this.userService.findByEmail(email);
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Req() req) {
+    return this.authService.login(req.user);
   }
 
-  @Post()
+  @Post('signup')
   async addUser(@Body() payload: CreateUserDto) {
     const saltOrRounds = 15;
     if (payload.password)
-      payload.password = hash(payload.password, saltOrRounds);
+      payload.password = await hash(payload.password, saltOrRounds);
     return this.userService.create(payload);
+  }
+
+  @Get('me')
+  me(@Req() req) {
+    return req.user;
   }
 }
