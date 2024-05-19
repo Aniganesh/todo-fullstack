@@ -8,6 +8,7 @@ export type SupportedMethod =
   | "PATCH"
   | "patch";
 
+export type Params = object;
 class FetchWrapper {
   baseURL: string;
   commonHeaders?: Record<string, string> = {
@@ -32,33 +33,50 @@ class FetchWrapper {
     method,
     url,
     data,
+    params,
   }: {
     method: SupportedMethod;
     url: string;
     data?: Data;
+    params?: Params;
   }): Promise<Awaited<ExpectedResponse>> => {
-    return await this._request<ExpectedResponse, Data>({ method, url, data });
+    return await this._request<ExpectedResponse, Data>({
+      method,
+      url,
+      data,
+      params,
+    });
   };
 
   _request = async <ExpectedResponse, Data>({
     method,
     url,
     data,
+    params,
   }: {
     method: SupportedMethod;
     url: string;
     data?: Data;
+    params?: Params;
   }): Promise<Awaited<ExpectedResponse>> => {
     const _baseURL =
       this.baseURL[this.baseURL.length - 1] === "/"
         ? this.baseURL.slice(0, -1)
         : this.baseURL;
     const _url = url[0] === "/" ? url : "/" + url;
-    const res = await fetch(`${_baseURL}${_url}`, {
-      method,
-      body: JSON.stringify(data),
-      headers: { ...this.commonHeaders },
-    });
+    const _params = new URLSearchParams("");
+    if (params)
+      Object.keys(params).forEach(([key, value]) => {
+        _params.set(key, value);
+      });
+    const res = await fetch(
+      `${_baseURL}${_url}${params ? "?" + _params.toString() : ""}`,
+      {
+        method,
+        body: JSON.stringify(data),
+        headers: { ...this.commonHeaders },
+      }
+    );
     if (res.status >= 400) {
       const json = await res.json();
       throw {
@@ -93,8 +111,12 @@ class FetchWrapper {
     return this.request<ExpectedResponse, Data>({ method: "PATCH", url, data });
   };
 
-  get = async <ExpectedResponse>(url: string) => {
-    return this.request<ExpectedResponse>({ method: "GET", url });
+  get = async <ExpectedResponse>(url: string, params?: Params) => {
+    return this.request<ExpectedResponse, null>({
+      method: "GET",
+      url,
+      params,
+    });
   };
 }
 

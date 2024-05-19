@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
-import Modal from "./Modal";
+import Modal from "../Components/Modal";
 import { AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoginData, SignupData } from "@/api/Auth/types";
+import CircularProgress from "@/Components/CircularProgress";
+import { useStore } from "@/Store";
 
 interface HeaderProps {}
 
@@ -38,12 +41,8 @@ const Header: FC<HeaderProps> = () => {
         </Button>
       </div>
       <Modal isOpen={!!modal} onClose={closeModal}>
-        <AnimatePresence>
-          {modal === "login" && <LoginForm switchForms={switchForm} />}
-        </AnimatePresence>
-        <AnimatePresence>
-          {modal === "signup" && <SignupForm switchForms={switchForm} />}
-        </AnimatePresence>
+        {modal === "login" && <LoginForm switchForms={switchForm} />}
+        {modal === "signup" && <SignupForm switchForms={switchForm} />}
       </Modal>
     </div>
   );
@@ -56,14 +55,16 @@ interface LoginFormProps {
 }
 
 const LoginForm: FC<LoginFormProps> = ({ switchForms }) => {
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<LoginData>({
     defaultValues: { email: "", password: "" },
   });
-  const onSubmit = async () => {};
+
+  const login = useStore((state) => state.login);
+
   return (
     <form
       className="flex flex-col gap-4 border border-gray-200 p-4 rounded-md bg-slate-50 text-2xl"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(login)}
     >
       <Label className="text-2xl">Email</Label>
       <Input
@@ -94,7 +95,10 @@ const LoginForm: FC<LoginFormProps> = ({ switchForms }) => {
           </p>
         ))}
       </div>
-      <Button size="lg">Login</Button>
+      <Button disabled={formState.isSubmitting} size="lg">
+        {formState.isSubmitting && <CircularProgress className="size-5 mr-2" />}
+        Login
+      </Button>
       <Button onClick={switchForms} variant="ghost">
         Signup
       </Button>
@@ -107,16 +111,16 @@ interface SignupFormProps {
 }
 
 const SignupForm: FC<SignupFormProps> = ({ switchForms }) => {
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<SignupData>({
     defaultValues: { email: "", password: "", name: "" },
   });
 
-  const onSubmit = async () => {};
+  const signup = useStore((state) => state.signup);
 
   return (
     <form
       className="flex flex-col gap-4 border border-gray-200 p-4 rounded-md bg-slate-50 text-2xl"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(signup)}
     >
       <Label className="text-2xl">Name</Label>
       <Input
@@ -157,7 +161,10 @@ const SignupForm: FC<SignupFormProps> = ({ switchForms }) => {
           </p>
         ))}
       </div>
-      <Button size="lg">Signup</Button>
+      <Button disabled={formState.isSubmitting} size="lg">
+        {formState.isSubmitting && <CircularProgress className="size-5 mr-2" />}
+        Signup
+      </Button>
       <Button onClick={switchForms} variant="ghost">
         Login
       </Button>
