@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -21,8 +22,16 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  public async getTodos(@Req() req) {
-    return this.todosService.getAllForUser(req.user);
+  public async getTodos(
+    @Req() req,
+    @Query('filter') filter: string,
+    @Query('sort') sort: string,
+  ) {
+    return this.todosService.getAllForUser(
+      req.user,
+      filter && JSON.parse(filter),
+      sort && JSON.parse(sort),
+    );
   }
 
   @Get(':id')

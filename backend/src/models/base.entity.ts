@@ -14,3 +14,8 @@ export abstract class BaseEntity {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
 }
+
+export type EntitySort = Record<
+  'createDateTime' | 'lastChangedDateTime',
+  'ASC' | 'DESC'
+>;
