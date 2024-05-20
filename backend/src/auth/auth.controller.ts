@@ -4,6 +4,7 @@ import { CreateUserDto } from 'src/dtos/user';
 import { LocalAuthGuard } from 'src/guards/local.guard';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
+import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,7 @@ export class AuthController {
   }
 
   @Get('me')
+  @UseGuards(JWTAuthGuard)
   me(@Req() req) {
     return req.user;
   }
