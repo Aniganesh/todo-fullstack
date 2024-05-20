@@ -32,9 +32,16 @@ export type DNDItemProps<T extends ItemBaseType> =
       item: T;
     };
 
+export type ChangeObject = {
+  sourceIndex: number;
+  destinationIndex: number;
+  sourceKey: string;
+  destinationKey: string;
+};
+
 export interface DndBoardProps<T extends ItemBaseType> {
   boardData: BoardData<T>;
-  onBoardUpdate: (boardData: BoardData<T>) => void;
+  onBoardUpdate: (boardData: BoardData<T>, changeObject: ChangeObject) => void;
   ColumnComponent: FC<DNDColumnProps>;
   ItemComponent: FC<DNDItemProps<T>>;
 }
@@ -52,26 +59,35 @@ function DndBoard<T extends ItemBaseType>({
     if (!destination) {
       return;
     }
-    const sInd = source.droppableId;
-    const dInd = destination.droppableId;
-
-    if (sInd === dInd) {
-      const items = reorder(boardData[sInd], source.index, destination.index);
+    const sourceKey = source.droppableId;
+    const destinationKey = destination.droppableId;
+    const changeObject = {
+      sourceIndex: source.index,
+      destinationIndex: destination.index,
+      sourceKey,
+      destinationKey,
+    };
+    if (sourceKey === destinationKey) {
+      const items = reorder(
+        boardData[sourceKey],
+        source.index,
+        destination.index
+      );
       const newBoardData = { ...boardData };
-      newBoardData[sInd] = items;
-      onBoardUpdate(newBoardData);
+      newBoardData[sourceKey] = items;
+      onBoardUpdate(newBoardData, changeObject);
     } else {
       const result = move(
-        boardData[sInd],
-        boardData[dInd],
+        boardData[sourceKey],
+        boardData[destinationKey],
         source,
         destination
       );
       const newState = { ...boardData };
-      newState[sInd] = result[sInd];
-      newState[dInd] = result[dInd];
+      newState[sourceKey] = result[sourceKey];
+      newState[destinationKey] = result[destinationKey];
 
-      onBoardUpdate(newState);
+      onBoardUpdate(newState, changeObject);
     }
   };
 

@@ -1,8 +1,9 @@
 import { useStore } from "@/Store";
-import React, { FC } from "react";
+import { FC } from "react";
 import TodoCard from "./TodoCard";
 import DndBoard, {
   BoardData,
+  ChangeObject,
   DNDColumnProps,
   DNDItemProps,
 } from "@/Components/dnd";
@@ -14,8 +15,20 @@ interface TodosBoardProps {}
 const TodosBoard: FC<TodosBoardProps> = () => {
   const groupedTodos = useStore((state) => state.groupedTodos);
   const setGroupedTodos = useStore((state) => state.setGroupedTodos);
-  const onBoardUpdate = (boardData: BoardData<Todo>) => {
+  const updateTodo = useStore((state) => state.updateTodo);
+
+  const onBoardUpdate = (
+    boardData: BoardData<Todo>,
+    changeObject: ChangeObject
+  ) => {
     setGroupedTodos(boardData);
+    const updatedItem: Todo = {
+      ...boardData[changeObject.destinationKey][changeObject.destinationIndex],
+      status: changeObject.destinationKey,
+    };
+    if (updatedItem) {
+      updateTodo({ ...updatedItem });
+    }
   };
 
   return (
