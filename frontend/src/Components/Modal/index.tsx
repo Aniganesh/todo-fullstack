@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { modalToggleHandler } from "./toggleHandler";
 import { twMerge } from "tailwind-merge";
 import { Button, ButtonProps } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -83,7 +84,7 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
       />
       {showCloseButton && (
         <Button {...closeButtonProps}>
-          <i className="fa-solid fa-xmark text-4xl"></i>
+          <X />
         </Button>
       )}
       <div

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
 import Modal from "../Components/Modal";
-import { AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +11,8 @@ import { useStore } from "@/Store";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
+  const user = useStore((state) => state.user);
+
   const [modal, setModal] = useState<"login" | "signup" | undefined>();
 
   const openLoginModal = () => {
@@ -33,12 +34,18 @@ const Header: FC<HeaderProps> = () => {
     <div className="py-4 px-6 flex justify-between">
       <span className="text-2xl">Todo app</span>
       <div className="flex gap-4">
-        <Button variant="outline" onClick={openLoginModal}>
-          Login
-        </Button>
-        <Button variant="outline" onClick={openSignupModal}>
-          Signup
-        </Button>
+        {!user ? (
+          <>
+            <Button variant="outline" onClick={openLoginModal}>
+              Login
+            </Button>
+            <Button variant="outline" onClick={openSignupModal}>
+              Signup
+            </Button>
+          </>
+        ) : (
+          <p>{user.name}</p>
+        )}
       </div>
       <Modal isOpen={!!modal} onClose={closeModal}>
         {modal === "login" && <LoginForm switchForms={switchForm} />}

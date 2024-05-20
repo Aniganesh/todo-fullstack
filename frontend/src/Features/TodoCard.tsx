@@ -1,17 +1,26 @@
-import { Todo } from "@/types";
 import { FC, useState } from "react";
 import Modal from "@/Components/Modal";
 import TodoForm from "./TodoForm";
 import clsx from "clsx";
+import { Todo, TodoCreate } from "@/api/Todos/types";
+import { useStore } from "@/Store";
+import { X } from "lucide-react";
 
 interface TodoCardProps extends Todo {
   className?: string;
 }
 
 const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
+  const { title: name, description } = todo;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { name, description } = todo;
+  const updateTodo = useStore((state) => state.updateTodo);
+
+  const handleSubmit = (values: TodoCreate) => {
+    updateTodo({ ...values, id: todo.id });
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -35,10 +44,10 @@ const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
             className="absolute top-1 right-1 rounded-md hover:bg-zinc-200 px-1 z-[1]"
             onClick={closeModal}
           >
-            <i className="fa-solid fa-xmark"></i>
+            <X />
           </button>
           <TodoForm
-            onSubmit={console.log}
+            onSubmit={handleSubmit}
             submitText="Update"
             todo={todo}
             size="large"

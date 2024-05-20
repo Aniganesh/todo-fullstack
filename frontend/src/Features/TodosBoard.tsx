@@ -1,18 +1,25 @@
 import { useStore } from "@/Store";
 import React, { FC } from "react";
 import TodoCard from "./TodoCard";
-import DndBoard, { DNDColumnProps, DNDItemProps } from "@/Components/dnd";
-import { Todo } from "@/types";
+import DndBoard, {
+  BoardData,
+  DNDColumnProps,
+  DNDItemProps,
+} from "@/Components/dnd";
 import clsx from "clsx";
+import { Todo } from "@/api/Todos/types";
 
 interface TodosBoardProps {}
 
 const TodosBoard: FC<TodosBoardProps> = () => {
   const groupedTodos = useStore((state) => state.groupedTodos);
   const setGroupedTodos = useStore((state) => state.setGroupedTodos);
+  const onBoardUpdate = (boardData: BoardData<Todo>) => {
+    setGroupedTodos(boardData);
+  };
 
   return (
-    <div className="flex gap-3 flex-wrap h-full py-4">
+    <div className="flex gap-3 flex-wrap h-full py-4 justify-center">
       {Object.entries(groupedTodos).length === 0 && (
         <div className="bg-gray-100 flex h-full w-full flex-1 justify-center items-center rounded-md">
           <div className="text-center text-2xl text-gray-500">
@@ -22,7 +29,7 @@ const TodosBoard: FC<TodosBoardProps> = () => {
       )}
       <DndBoard<Todo>
         boardData={groupedTodos}
-        onBoardUpdate={setGroupedTodos}
+        onBoardUpdate={onBoardUpdate}
         ColumnComponent={TodoColumn}
         ItemComponent={TodoItem}
       />
@@ -40,7 +47,10 @@ const TodoColumn: FC<DNDColumnProps> = ({
   ...props
 }) => {
   return (
-    <div key={key} className={"flex-1 rounded-md px-3 py-4 h-full"}>
+    <div
+      key={key}
+      className={"flex-1 rounded-md px-3 py-4 h-full min-w-60 max-w-96"}
+    >
       <div className="uppercase text-slate-600 px-3">{key}</div>
       <div
         ref={innerRef}

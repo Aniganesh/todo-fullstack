@@ -1,11 +1,10 @@
-export interface Todo {
-  id: string;
-  name: string;
-  description: string;
-  status: string;
+export interface BaseEntity {
+  createDateTime: string;
+  lastChangedDateTime: string;
 }
 
-export interface User {
-  id: string;
-  name: string;
-}
+export const defaultTodoStatuses = {
+  todo: "todo",
+  inProgress: "inProgress",
+  complete: "complete",
+} as const;

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Todo } from "@/types";
 import { useForm } from "react-hook-form";
 import {
   Select,
@@ -12,16 +11,18 @@ import {
 } from "@/components/ui/select";
 import React, { FC } from "react";
 import { motion } from "framer-motion";
+import { Todo, TodoCreate } from "@/api/Todos/types";
+import { defaultTodoStatuses } from "@/types";
 
 interface TodoFormProps {
   todo?: Todo;
   submitText?: string;
   size?: "normal" | "large";
-  onSubmit: (values: Omit<Todo, "id">) => void;
+  onSubmit: (values: TodoCreate) => void;
 }
 
-const defaultValue: Omit<Todo, "id"> = {
-  name: "",
+const defaultValue: TodoCreate = {
+  title: "",
   description: "",
   status: "",
 };
@@ -32,9 +33,15 @@ const TodoForm: FC<TodoFormProps> = ({
   onSubmit,
   size = "normal",
 }) => {
-  const { register, handleSubmit } = useForm({
+  const { setValue, register, handleSubmit, getValues } = useForm({
     defaultValues: { ...defaultValue, ...todo },
   });
+  const statusRegProps = register("status", { required: true });
+
+  const setStatus = (value: string) => {
+    setValue("status", value);
+  };
+  const status = getValues().status;
 
   return (
     <form
@@ -44,7 +51,7 @@ const TodoForm: FC<TodoFormProps> = ({
       <motion.div layoutId={`${todo?.id}-name`}>
         <Input
           placeholder="Enter task title"
-          {...register("name", { required: true })}
+          {...register("title", { required: true })}
         />
       </motion.div>
       <motion.div layoutId={`${todo?.id}-description`}>
@@ -54,14 +61,18 @@ const TodoForm: FC<TodoFormProps> = ({
           {...register("description", { required: true })}
         />
       </motion.div>
-      <Select {...register("status", { required: true })}>
+      <Select {...statusRegProps} onValueChange={setStatus} value={status}>
         <SelectTrigger>
           <SelectValue placeholder="Select status"></SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="todo">To do</SelectItem>
-          <SelectItem value="in-progress">In Progress</SelectItem>
-          <SelectItem value="completed">Completed</SelectItem>
+          <SelectItem value={defaultTodoStatuses.todo}>To do</SelectItem>
+          <SelectItem value={defaultTodoStatuses.inProgress}>
+            In Progress
+          </SelectItem>
+          <SelectItem value={defaultTodoStatuses.complete}>
+            Completed
+          </SelectItem>
         </SelectContent>
       </Select>
       <Button type="submit" variant="secondary">

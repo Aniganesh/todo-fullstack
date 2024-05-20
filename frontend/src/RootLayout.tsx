@@ -1,13 +1,19 @@
-import { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { FC, Suspense } from "react";
+import { Await, Outlet, useLoaderData } from "react-router-dom";
 import Header from "./Features/Header";
 
+interface LoaderData {
+  fetchMe: () => Promise<void>;
+}
 const RootLayout: FC = () => {
+  const loaderData = useLoaderData() as LoaderData;
   return (
-    <>
-      <Header />
-      <Outlet />
-    </>
+    <Suspense>
+      <Await resolve={loaderData.fetchMe}>
+        <Header />
+        <Outlet />
+      </Await>
+    </Suspense>
   );
 };
 
