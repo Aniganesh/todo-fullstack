@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { modalToggleHandler } from "./toggleHandler";

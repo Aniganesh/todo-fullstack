@@ -9,16 +9,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React, { FC } from "react";
+import { FC } from "react";
 import { motion } from "framer-motion";
 import { Todo, TodoCreate } from "@/api/Todos/types";
 import { defaultTodoStatuses } from "@/types";
+import Modal from "@/components/Modal";
+import { X } from "lucide-react";
 
 interface TodoFormProps {
   todo?: Todo;
   submitText?: string;
   size?: "normal" | "large";
   onSubmit: (values: TodoCreate) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const defaultValue: TodoCreate = {
@@ -32,6 +36,8 @@ const TodoForm: FC<TodoFormProps> = ({
   submitText,
   onSubmit,
   size = "normal",
+  isOpen,
+  onClose,
 }) => {
   const { setValue, register, handleSubmit, getValues } = useForm({
     defaultValues: { ...defaultValue, ...todo },
@@ -45,41 +51,53 @@ const TodoForm: FC<TodoFormProps> = ({
   const status = getValues().status;
 
   return (
-    <form
-      className="flex flex-col relative gap-4 px-6 pb-2 pt-6 w-full h-full"
-      onSubmit={handleSubmit(onSubmit)}
+    <Modal
+      isOpen={isOpen}
+      contentClass="h-full w-full bg-gray-50 relative pt-5 "
+      onClose={onClose}
     >
-      <motion.div layoutId={`${todo?.id}-name`}>
-        <Input
-          placeholder="Enter task title"
-          {...register("title", { required: true })}
-        />
-      </motion.div>
-      <motion.div layoutId={`${todo?.id}-description`}>
-        <Textarea
-          rows={size === "large" ? 20 : 2}
-          placeholder="Enter description"
-          {...register("description", { required: true })}
-        />
-      </motion.div>
-      <Select {...statusRegProps} onValueChange={setStatus} value={status}>
-        <SelectTrigger>
-          <SelectValue placeholder="Select status"></SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={defaultTodoStatuses.todo}>To do</SelectItem>
-          <SelectItem value={defaultTodoStatuses.inProgress}>
-            In Progress
-          </SelectItem>
-          <SelectItem value={defaultTodoStatuses.complete}>
-            Completed
-          </SelectItem>
-        </SelectContent>
-      </Select>
-      <Button type="submit" variant="secondary">
-        {submitText}
-      </Button>
-    </form>
+      <button
+        className="absolute top-1 right-1 rounded-md hover:bg-zinc-200 px-1 z-[1]"
+        onClick={onClose}
+      >
+        <X />
+      </button>
+      <form
+        className="flex flex-col relative gap-4 px-6 pb-2 pt-6 w-full h-full"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <motion.div layoutId={`${todo?.id}-name`}>
+          <Input
+            placeholder="Enter task title"
+            {...register("title", { required: true })}
+          />
+        </motion.div>
+        <motion.div layoutId={`${todo?.id}-description`}>
+          <Textarea
+            rows={size === "large" ? 20 : 2}
+            placeholder="Enter description"
+            {...register("description", { required: true })}
+          />
+        </motion.div>
+        <Select {...statusRegProps} onValueChange={setStatus} value={status}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select status"></SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={defaultTodoStatuses.todo}>To do</SelectItem>
+            <SelectItem value={defaultTodoStatuses.inProgress}>
+              In Progress
+            </SelectItem>
+            <SelectItem value={defaultTodoStatuses.complete}>
+              Completed
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        <Button type="submit" variant="secondary">
+          {submitText}
+        </Button>
+      </form>
+    </Modal>
   );
 };
 

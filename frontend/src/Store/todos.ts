@@ -68,7 +68,8 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
   },
 });
 
-const getDefaultGroup = (user?: User) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getDefaultGroup = (_user?: User) => {
   return {
     [defaultTodoStatuses.todo]: [],
     [defaultTodoStatuses.inProgress]: [],
