@@ -6,7 +6,7 @@ import DndBoard, {
   ChangeObject,
   DNDColumnProps,
   DNDItemProps,
-} from "@/Components/dnd";
+} from "@/components/dnd";
 import clsx from "clsx";
 import { Todo } from "@/api/Todos/types";
 

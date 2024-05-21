@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import Modal from "@/Components/Modal";
+import Modal from "@/components/Modal";
 import TodoForm from "./TodoForm";
 import clsx from "clsx";
 import { Todo, TodoCreate } from "@/api/Todos/types";

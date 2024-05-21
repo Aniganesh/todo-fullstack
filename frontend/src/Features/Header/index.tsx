@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
-import Modal from "../Components/Modal";
+import Modal from "@/components/Modal";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginData, SignupData } from "@/api/Auth/types";
-import CircularProgress from "@/Components/CircularProgress";
+import CircularProgress from "@/components/CircularProgress";
 import { useStore } from "@/Store";
 
 interface HeaderProps {}
