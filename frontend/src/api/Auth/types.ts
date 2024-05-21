@@ -12,6 +12,12 @@ export interface SignupData {
 }
 
 export interface User extends BaseEntity {
-  id: string;
   name: string;
 }
+
+export type UpdateUser = Omit<User, keyof BaseEntity>;
+
+export type PasswordChangeDto = {
+  currentPassword: string;
+  newPassword: string;
+};

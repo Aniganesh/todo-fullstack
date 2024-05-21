@@ -1,5 +1,11 @@
 import Fetch from "@/FetchWrapper";
-import { LoginData, SignupData, User } from "./types";
+import {
+  LoginData,
+  PasswordChangeDto,
+  SignupData,
+  UpdateUser,
+  User,
+} from "./types";
 
 export const login = async (
   data: LoginData
@@ -19,4 +25,14 @@ export const signup = async (
 
 export const me = async (): Promise<User> => {
   return Fetch.get("/auth/me");
+};
+
+export const changePassword = async (
+  data: PasswordChangeDto
+): Promise<boolean> => {
+  return Fetch.post({ url: "/auth/password", data });
+};
+
+export const updateUser = (data: UpdateUser): Promise<User> => {
+  return Fetch.post({ url: "/auth/user", data });
 };

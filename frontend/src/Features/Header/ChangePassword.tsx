@@ -1,0 +1,43 @@
+import { changePassword } from "@/api/Auth";
+import { PasswordChangeDto } from "@/api/Auth/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@radix-ui/react-label";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface ChangePasswordProps {}
+
+export const ChangePassword: FC<ChangePasswordProps> = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { register, handleSubmit } = useForm<PasswordChangeDto>();
+
+  return (
+    <div className="pt-4 flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit(changePassword)}
+        className="flex flex-col gap-4"
+      >
+        <Label>Current Password</Label>
+        <Input
+          type={showPassword ? "text" : "password"}
+          {...register("currentPassword", { required: true })}
+        />
+        <Label>New Password</Label>
+        <Input
+          type={showPassword ? "text" : "password"}
+          {...register("newPassword", { required: true })}
+        />
+        <div className="flex gap-4">
+          <Label>Hide </Label>
+          <Switch checked={showPassword} onCheckedChange={setShowPassword} />
+          <Label>Show </Label>
+        </div>
+        <Button>Save</Button>
+      </form>
+    </div>
+  );
+};
+export default ChangePassword;

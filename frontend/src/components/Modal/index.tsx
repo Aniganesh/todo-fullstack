@@ -94,7 +94,7 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
       >
         <div
           className={twMerge(
-            "relative h-full flex flex-col items-center",
+            "relative h-full flex flex-col items-center bg-gray-50",
             contentClass
           )}
         >

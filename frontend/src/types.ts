@@ -1,4 +1,5 @@
 export interface BaseEntity {
+  id: string;
   createDateTime: string;
   lastChangedDateTime: string;
 }

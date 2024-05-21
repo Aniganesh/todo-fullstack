@@ -1,6 +1,6 @@
 import Fetch from "@/FetchWrapper";
-import { me, login, signup } from "@/api/Auth";
-import { LoginData, SignupData, User } from "@/api/Auth/types";
+import { me, login, signup, updateUser } from "@/api/Auth";
+import { LoginData, SignupData, UpdateUser, User } from "@/api/Auth/types";
 import { StateCreator } from "zustand";
 import { GlobalStore } from ".";
 
@@ -12,6 +12,7 @@ export interface UserSlice {
   login: (loginData: LoginData) => Promise<void>;
   fetchMe: () => Promise<User | undefined>;
   signup: (signupData: SignupData) => Promise<void>;
+  updateUser: (userData: UpdateUser) => Promise<void>;
 }
 
 export const createUserSlice: StateCreator<GlobalStore, [], [], UserSlice> = (
@@ -49,5 +50,10 @@ export const createUserSlice: StateCreator<GlobalStore, [], [], UserSlice> = (
     const token = (await signup(signupData)).access_token;
     setToken(token);
     await fetchMe();
+  },
+  updateUser: async (data: UpdateUser) => {
+    const { setUser } = getStore();
+    const user = await updateUser(data);
+    setUser(user);
   },
 });

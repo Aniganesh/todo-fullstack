@@ -54,7 +54,7 @@ const TodoForm: FC<TodoFormProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      contentClass="h-full w-full bg-gray-50 relative pt-5 "
+      contentClass="h-full w-full pt-5 "
       onClose={handleClose}
     >
       <button
