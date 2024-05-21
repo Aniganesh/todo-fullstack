@@ -3,12 +3,14 @@ import { Users } from 'src/models/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync } from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validate(email: string, password: string): Promise<Users | null> {
@@ -25,8 +27,8 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload, {
-        secret: process.env.SECRET,
-        privateKey: process.env.SECRET,
+        secret: this.configService.get('SECRET'),
+        privateKey: this.configService.get('SECRET'),
       }),
     };
   }
@@ -34,7 +36,7 @@ export class AuthService {
   verify(accessToken: string) {
     const fixedAccessToken = accessToken.replace('Bearer ', '');
     const decoded = this.jwtService.verify(fixedAccessToken, {
-      secret: process.env.JWT_SECRET,
+      secret: this.configService.get('JWT_SECRET'),
     });
     const user = this.usersService.findByEmail(decoded.email);
     if (!user) throw new Error('User not found');

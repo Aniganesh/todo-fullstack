@@ -6,6 +6,7 @@ import { LocalStrategy } from '../strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
       secretOrPrivateKey: process.env.SECRET,
     }),
     forwardRef(() => UsersModule),
+    ConfigModule,
   ],
 
   providers: [AuthService, JwtStrategy, LocalStrategy],

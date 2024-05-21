@@ -1,12 +1,17 @@
+import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/dtos/user';
+import { hash } from 'bcrypt';
+import { CreateUserDto, UpdateUserDto } from 'src/dtos/user';
 import { Users } from 'src/models/users.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(Users) private userRepo: Repository<Users>) {}
+  constructor(
+    @InjectRepository(Users) private userRepo: Repository<Users>,
+    private configService: ConfigService,
+  ) {}
 
   public async findOne(id: string) {
     return this.userRepo.findOne({ where: { id } });
@@ -29,5 +34,21 @@ export class UsersService {
   public async create(userDto: CreateUserDto) {
     const user = this.userRepo.create(userDto);
     return this.userRepo.save(user);
+  }
+
+  public async changePassword(userId: string, password: string) {
+    const hashedPassword = await hash(
+      password,
+      +this.configService.get('SALT_OR_ROUNDS'),
+    );
+    this.userRepo.update(userId, { password: hashedPassword });
+  }
+
+  public async update(userId: string, data: UpdateUserDto) {
+    return this.userRepo.update(userId, data);
+  }
+
+  public async get(id: string) {
+    return this.userRepo.findOneBy({ id });
   }
 }
