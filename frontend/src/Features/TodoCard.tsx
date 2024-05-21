@@ -40,7 +40,6 @@ const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
         onSubmit={handleSubmit}
         submitText="Update"
         todo={todo}
-        size="large"
         isOpen={isModalOpen}
         onClose={closeModal}
       />

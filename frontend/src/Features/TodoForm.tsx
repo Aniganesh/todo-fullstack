@@ -19,7 +19,6 @@ import { X } from "lucide-react";
 interface TodoFormProps {
   todo?: Todo;
   submitText?: string;
-  size?: "normal" | "large";
   onSubmit: (values: TodoCreate) => void;
   isOpen: boolean;
   onClose: () => void;
@@ -35,11 +34,10 @@ const TodoForm: FC<TodoFormProps> = ({
   todo,
   submitText,
   onSubmit,
-  size = "normal",
   isOpen,
   onClose,
 }) => {
-  const { setValue, register, handleSubmit, getValues } = useForm({
+  const { setValue, register, handleSubmit, getValues, reset } = useForm({
     defaultValues: { ...defaultValue, ...todo },
   });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,12 +47,15 @@ const TodoForm: FC<TodoFormProps> = ({
     setValue("status", value);
   };
   const status = getValues().status;
-
+  const handleClose = () => {
+    onClose();
+    reset();
+  };
   return (
     <Modal
       isOpen={isOpen}
       contentClass="h-full w-full bg-gray-50 relative pt-5 "
-      onClose={onClose}
+      onClose={handleClose}
     >
       <button
         className="absolute top-1 right-1 rounded-md hover:bg-zinc-200 px-1 z-[1]"
@@ -69,12 +70,14 @@ const TodoForm: FC<TodoFormProps> = ({
         <motion.div layoutId={`${todo?.id}-name`}>
           <Input
             placeholder="Enter task title"
+            autoFocus={!todo?.title}
             {...register("title", { required: true })}
           />
         </motion.div>
         <motion.div layoutId={`${todo?.id}-description`}>
           <Textarea
-            rows={size === "large" ? 20 : 2}
+            autoFocus={!!todo?.title}
+            rows={2}
             placeholder="Enter description"
             {...register("description", { required: true })}
           />
