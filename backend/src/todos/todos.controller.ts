@@ -15,6 +15,7 @@ import {
 import { TodosService } from './todos.service';
 import { CreateTodo, UpdateTodo } from 'src/dtos/todo';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
+import { z } from 'zod';
 
 @Controller('todos')
 @UseGuards(JWTAuthGuard)
@@ -44,11 +45,34 @@ export class TodosController {
 
   @Post()
   public async postTodos(@Req() req, @Body() todo: CreateTodo) {
+    const schema = z.strictObject({
+      description: z.string(),
+      status: z.string(),
+      title: z.string(),
+    });
+    try {
+      schema.parse(todo);
+    } catch (err) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
     return this.todosService.createOne({ ...todo, user: req.user.id });
   }
 
   @Patch()
   public async updateTodo(@Body() data: UpdateTodo) {
+    const schema = z.strictObject({
+      id: z.string(),
+      description: z.string().optional(),
+      status: z.string().optional(),
+      title: z.string().optional(),
+      createDateTime: z.string().optional(),
+      lastChangedDateTime: z.string().optional(),
+    });
+    try {
+      schema.parse(data);
+    } catch (err) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
     const updateResult = await this.todosService.updateOne(data);
     if (updateResult.affected) return this.getTodo(data.id);
     else
@@ -60,6 +84,12 @@ export class TodosController {
 
   @Delete(':id')
   public async deleteTodo(@Param('id') id: string) {
+    const schema = z.string();
+    try {
+      schema.parse(id);
+    } catch (err) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
     const deleteResult = await this.todosService.deleteOne(id);
     if (deleteResult.affected) return HttpStatus.NO_CONTENT;
   }
