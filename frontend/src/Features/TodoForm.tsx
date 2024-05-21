@@ -36,7 +36,8 @@ const TodoForm: FC<TodoFormProps> = ({
   const { setValue, register, handleSubmit, getValues } = useForm({
     defaultValues: { ...defaultValue, ...todo },
   });
-  const statusRegProps = register("status", { required: true });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { ref: _, ...statusRegProps } = register("status", { required: true });
 
   const setStatus = (value: string) => {
     setValue("status", value);
