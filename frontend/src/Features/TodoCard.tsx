@@ -33,7 +33,7 @@ const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
     <>
       <div
         className={clsx(className, "p-2 bg-slate-50 rounded-md shadow-sm")}
-        onDoubleClick={openModal}
+        onClick={openModal}
       >
         <p className="text-2xl font-bold">{name}</p>
         <p className="limit-lines-2">{description}</p>
