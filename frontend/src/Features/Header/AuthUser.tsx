@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChangePassword from "./ChangePassword";
+import CircularProgress from "@/components/CircularProgress";
 
 interface AuthUserProps {}
 
@@ -22,12 +23,16 @@ const AuthUser: FC<AuthUserProps> = () => {
   const user = useStore((state) => state.user);
   const updateUser = useStore((state) => state.updateUser);
 
-  const { register, handleSubmit } = useForm<UpdateUser>({
+  const { register, formState, handleSubmit, reset } = useForm<UpdateUser>({
     defaultValues: { ...defaultValues, ...user },
   });
 
   const toggle = () => {
     setIsOpen((curr) => !curr);
+  };
+  const close = () => {
+    reset();
+    toggle();
   };
 
   return (
@@ -39,7 +44,7 @@ const AuthUser: FC<AuthUserProps> = () => {
       >
         {user?.name}
       </p>
-      <Modal isOpen={isOpen} onClose={toggle}>
+      <Modal isOpen={isOpen} onClose={close}>
         <button
           className="absolute top-1 right-1 rounded-md hover:bg-zinc-200 px-1 z-[1]"
           onClick={toggle}
@@ -59,7 +64,12 @@ const AuthUser: FC<AuthUserProps> = () => {
               >
                 <Label>Name</Label>
                 <Input {...register("name", { required: true })} />
-                <Button type="submit">Save</Button>
+                <Button type="submit" disabled={formState.isSubmitting}>
+                  {formState.isSubmitting && (
+                    <CircularProgress className="size-5 mr-4" />
+                  )}{" "}
+                  Save
+                </Button>
               </form>
             </TabsContent>
             <TabsContent value="Password">

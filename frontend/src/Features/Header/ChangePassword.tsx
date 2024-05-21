@@ -1,5 +1,6 @@
 import { changePassword } from "@/api/Auth";
 import { PasswordChangeDto } from "@/api/Auth/types";
+import CircularProgress from "@/components/CircularProgress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -12,7 +13,7 @@ interface ChangePasswordProps {}
 export const ChangePassword: FC<ChangePasswordProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { register, handleSubmit } = useForm<PasswordChangeDto>();
+  const { register, handleSubmit, formState } = useForm<PasswordChangeDto>();
 
   return (
     <div className="pt-4 flex flex-col gap-2">
@@ -35,7 +36,12 @@ export const ChangePassword: FC<ChangePasswordProps> = () => {
           <Switch checked={showPassword} onCheckedChange={setShowPassword} />
           <Label>Show </Label>
         </div>
-        <Button>Save</Button>
+        <Button disabled={formState.isSubmitting}>
+          {formState.isSubmitting && (
+            <CircularProgress className="size-5 mr-4" />
+          )}{" "}
+          Save
+        </Button>
       </form>
     </div>
   );
