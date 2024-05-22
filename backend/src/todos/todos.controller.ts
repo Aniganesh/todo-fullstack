@@ -25,8 +25,8 @@ export class TodosController {
   @Get()
   public async getTodos(
     @Req() req,
-    @Query('filter') filter: string,
-    @Query('sort') sort: string,
+    @Query('filter') filter?: string,
+    @Query('sort') sort?: string,
   ) {
     return this.todosService.getAllForUser(
       req.user,
