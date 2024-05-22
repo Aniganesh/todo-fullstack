@@ -96,9 +96,7 @@ const TodoForm: FC<TodoFormProps> = ({
             </SelectItem>
           </SelectContent>
         </Select>
-        <Button type="submit" variant="secondary">
-          {submitText}
-        </Button>
+        <Button type="submit">{submitText}</Button>
       </form>
     </Modal>
   );

@@ -89,12 +89,12 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({
       )}
       <div
         className={
-          "content-container absolute top-0 bottom-0 left-0 right-0 lg:max-w-4xl md:max-w-2xl h-fit bg-primary-light rounded-xl shadow-sm m-auto md:max-h-[80vh] max-h-screen max-sm:h-full overflow-y-auto"
+          "content-container absolute top-0 bottom-0 left-0 right-0 max-w-[90vw] lg:max-w-4xl md:max-w-2xl h-fit rounded-xl shadow-md border m-auto max-h-[80vh] overflow-y-auto bg-gray-50"
         }
       >
         <div
           className={twMerge(
-            "relative h-full flex flex-col items-center bg-gray-50",
+            "relative h-full flex flex-col items-center",
             contentClass
           )}
         >
