@@ -38,8 +38,9 @@ export class TodosController {
   @Get(':id')
   public async getTodo(@Param('id') id: string) {
     const todo = await this.todosService.getOne(id);
-    if (!todo)
+    if (!todo) {
       throw new HttpException('Could not find task', HttpStatus.NOT_FOUND);
+    }
     return todo;
   }
 

@@ -1,6 +1,3 @@
-import { Users } from 'src/models/users.entity';
-import { BaseEntity } from 'src/models/base.entity';
-
 export interface CreateUserDto {
   email: string;
   name: string;
@@ -12,4 +9,6 @@ export type PasswordChangeDto = {
   newPassword: string;
 };
 
-export type UpdateUserDto = Omit<Users, keyof BaseEntity>;
+export type UpdateUserDto = {
+  name: string;
+};
