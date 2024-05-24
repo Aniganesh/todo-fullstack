@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Button } from "@/components/ui/button";
 import TodoForm from "./TodoForm";
 import { useStore } from "@/Store";
-import { TodoCreate } from "@/api/Todos/types";
+import { CreateTodo } from "dtos";
 
 const AddNewTodo: FC = () => {
   const [showForm, setShowForm] = useState(false);
@@ -13,7 +13,7 @@ const AddNewTodo: FC = () => {
     setShowForm((curr) => !curr);
   };
 
-  const onSubmit = async (values: TodoCreate) => {
+  const onSubmit = async (values: CreateTodo) => {
     await createTodo(values);
     setShowForm(false);
   };

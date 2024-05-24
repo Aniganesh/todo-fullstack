@@ -1,5 +1,5 @@
 {
-  "name": "todo-app-frontend",
+  "name": "todo-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,6 +20,7 @@
     "autoprefixer": "^10.4.19",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dtos": "workspace:dtos",
     "framer-motion": "^11.1.9",
     "localforage": "^1.10.0",
     "lucide-react": "^0.378.0",

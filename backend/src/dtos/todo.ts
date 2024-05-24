@@ -1,13 +1,6 @@
 import { Users } from 'src/models/users.entity';
-
-export interface CreateTodo {
-  title: string;
-  description: string;
-  status: string;
-}
+import { CreateTodo } from 'dtos';
 
 export interface CreateTodoForUser extends CreateTodo {
   user: Users;
 }
-
-export type UpdateTodo = { id: string } & Partial<CreateTodo>;

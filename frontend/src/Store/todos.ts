@@ -1,6 +1,7 @@
 import { defaultTodoStatuses } from "./../types";
 import { createTodo, getTodos, updateTodo } from "@/api/Todos";
-import { Todo, TodoCreate, TodoUpdate } from "@/api/Todos/types";
+import { Todo } from "@/api/Todos/types";
+import { CreateTodo, UpdateTodo } from "dtos";
 import { StateCreator } from "zustand";
 import { GlobalStore } from ".";
 import { User } from "@/api/Auth/types";
@@ -11,8 +12,8 @@ export interface TodosSlice {
   groupedTodos: GroupedTodos;
   setGroupedTodos: (groupedTodos: GroupedTodos) => void;
   addToGroup: (group: string, todos: Todo[]) => void;
-  createTodo: (todoData: TodoCreate) => Promise<void>;
-  updateTodo: (todoData: TodoUpdate) => Promise<void>;
+  createTodo: (todoData: CreateTodo) => Promise<void>;
+  updateTodo: (todoData: UpdateTodo) => Promise<void>;
   getAllTodos: () => Promise<void>;
 }
 
@@ -34,7 +35,7 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
       },
     });
   },
-  createTodo: async (todoData: TodoCreate) => {
+  createTodo: async (todoData: CreateTodo) => {
     const { addToGroup } = getSliceState();
     const todo = (await createTodo(todoData)) as Todo;
     addToGroup(todo.status, [todo]);

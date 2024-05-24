@@ -1,9 +1,9 @@
 import { useStore } from "@/Store";
-import { SignupData } from "@/api/Auth/types";
 import CircularProgress from "@/components/CircularProgress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
+import { CreateUser } from "dtos";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 
@@ -12,7 +12,7 @@ interface SignupFormProps {
 }
 
 export const SignupForm: FC<SignupFormProps> = ({ switchForms }) => {
-  const { register, handleSubmit, formState } = useForm<SignupData>({
+  const { register, handleSubmit, formState } = useForm<CreateUser>({
     defaultValues: { email: "", password: "", name: "" },
   });
 

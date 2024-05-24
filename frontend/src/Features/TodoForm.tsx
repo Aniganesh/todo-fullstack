@@ -11,20 +11,21 @@ import {
 } from "@/components/ui/select";
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { Todo, TodoCreate } from "@/api/Todos/types";
+import { Todo } from "@/api/Todos/types";
 import { defaultTodoStatuses } from "@/types";
 import Modal from "@/components/Modal";
 import { X } from "lucide-react";
+import { CreateTodo } from "dtos";
 
 interface TodoFormProps {
   todo?: Todo;
   submitText?: string;
-  onSubmit: (values: TodoCreate) => void;
+  onSubmit: (values: CreateTodo) => void;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const defaultValue: TodoCreate = {
+const defaultValue: CreateTodo = {
   title: "",
   description: "",
   status: "",

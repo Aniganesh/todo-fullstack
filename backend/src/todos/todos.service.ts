@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTodoForUser, UpdateTodo } from 'src/dtos/todo';
+import { UpdateTodo } from 'dtos';
+import { CreateTodoForUser } from 'src/dtos/todo';
 import { EntitySort } from 'src/models/base.entity';
 import { Todo } from 'src/models/todos.entity';
 import { Users } from 'src/models/users.entity';

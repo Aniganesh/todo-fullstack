@@ -1,5 +1,5 @@
 import { changePassword } from "@/api/Auth";
-import { PasswordChangeDto } from "@/api/Auth/types";
+import { PasswordChange } from "dtos";
 import CircularProgress from "@/components/CircularProgress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ interface ChangePasswordProps {}
 export const ChangePassword: FC<ChangePasswordProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { register, handleSubmit, formState } = useForm<PasswordChangeDto>();
+  const { register, handleSubmit, formState } = useForm<PasswordChange>();
 
   return (
     <div className="pt-4 flex flex-col gap-2">

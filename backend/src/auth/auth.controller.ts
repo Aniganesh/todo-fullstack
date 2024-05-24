@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { CreateUserDto, PasswordChangeDto, UpdateUserDto } from 'src/dtos/user';
+import { CreateUser, PasswordChange, UpdateUser } from 'dtos';
 import { LocalAuthGuard } from 'src/guards/local.guard';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
@@ -33,7 +33,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  async addUser(@Body() payload: CreateUserDto) {
+  async addUser(@Body() payload: CreateUser) {
     try {
       const schema = z.object({
         name: z.string(),
@@ -60,7 +60,7 @@ export class AuthController {
 
   @Post('password')
   @UseGuards(JWTAuthGuard)
-  async changePassword(@Req() req, @Body() body: PasswordChangeDto) {
+  async changePassword(@Req() req, @Body() body: PasswordChange) {
     try {
       const schema = z.object({
         currentPassword: z.string(),
@@ -82,7 +82,7 @@ export class AuthController {
 
   @Post('user')
   @UseGuards(JWTAuthGuard)
-  async updateUser(@Req() req, @Body() body: UpdateUserDto) {
+  async updateUser(@Req() req, @Body() body: UpdateUser) {
     try {
       const schema = z.object({
         name: z.string(),

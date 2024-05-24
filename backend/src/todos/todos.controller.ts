@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { CreateTodo, UpdateTodo } from 'src/dtos/todo';
+import { CreateTodo, UpdateTodo } from 'dtos';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { z } from 'zod';
 

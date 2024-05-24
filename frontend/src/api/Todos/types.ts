@@ -12,6 +12,3 @@ export interface Todo extends BaseEntity {
   description: string;
   status: string;
 }
-
-export type TodoCreate = Omit<Todo, keyof BaseEntity>;
-export type TodoUpdate = Partial<TodoCreate> & Pick<Todo, "id">;

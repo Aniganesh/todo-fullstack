@@ -1,5 +1,5 @@
 import { useStore } from "@/Store";
-import { UpdateUser } from "@/api/Auth/types";
+import { UpdateUser } from "dtos";
 import Modal from "@/components/Modal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";

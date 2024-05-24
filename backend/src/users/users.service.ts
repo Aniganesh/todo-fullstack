@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash } from 'bcrypt';
-import { CreateUserDto, UpdateUserDto } from 'src/dtos/user';
+import { CreateUser, UpdateUser } from 'dtos';
 import { Users } from 'src/models/users.entity';
 import { Repository } from 'typeorm';
 
@@ -31,7 +31,7 @@ export class UsersService {
     return res;
   }
 
-  public async create(userDto: CreateUserDto) {
+  public async create(userDto: CreateUser) {
     const user = this.userRepo.create(userDto);
     return this.userRepo.save(user);
   }
@@ -44,7 +44,7 @@ export class UsersService {
     this.userRepo.update(userId, { password: hashedPassword });
   }
 
-  public async update(userId: string, data: UpdateUserDto) {
+  public async update(userId: string, data: UpdateUser) {
     return this.userRepo.update(userId, data);
   }
 

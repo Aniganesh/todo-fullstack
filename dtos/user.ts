@@ -1,14 +1,14 @@
-export interface CreateUserDto {
+export interface CreateUser {
   email: string;
   name: string;
   password: string;
 }
 
-export type PasswordChangeDto = {
+export type PasswordChange = {
   currentPassword: string;
   newPassword: string;
 };
 
-export type UpdateUserDto = {
+export type UpdateUser = {
   name: string;
 };

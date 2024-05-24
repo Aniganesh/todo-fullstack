@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import TodoForm from "./TodoForm";
 import clsx from "clsx";
-import { Todo, TodoCreate } from "@/api/Todos/types";
+import { Todo } from "@/api/Todos/types";
 import { useStore } from "@/Store";
+import { CreateTodo } from "dtos";
 
 interface TodoCardProps extends Todo {
   className?: string;
@@ -15,7 +16,7 @@ const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
 
   const updateTodo = useStore((state) => state.updateTodo);
 
-  const handleSubmit = (values: TodoCreate) => {
+  const handleSubmit = (values: CreateTodo) => {
     updateTodo({ ...values, id: todo.id });
   };
 
