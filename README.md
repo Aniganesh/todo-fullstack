@@ -9,3 +9,4 @@ To run the app locally:
 - Run `pnpm install` to install all the dependencies for both frontend and backend.
 - Run `pnpm --filter todo-frontend run dev` in one terminal and `pnpm --filter todo-backend run start:dev`.
 
+To run the test suites, run `pnpm --filter todo-backend run test`.

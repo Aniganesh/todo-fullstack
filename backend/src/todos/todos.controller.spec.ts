@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodosController } from './todos.controller';
-import { TodoFilter, TodosService } from './todos.service';
-import { CreateTodo } from 'src/dtos/todo';
+import { TodosService } from './todos.service';
+import { TodoFilter, CreateTodo } from 'dtos';
 import { Todo } from 'src/models/todos.entity';
 import { Users } from 'src/models/users.entity';
 
