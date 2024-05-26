@@ -35,7 +35,7 @@ const TodoCard: FC<TodoCardProps> = ({ className, ...todo }) => {
         onClick={openModal}
       >
         <p className="text-2xl font-bold">{name}</p>
-        <p className="limit-lines-2">{description}</p>
+        <p className="line-clamp-2">{description}</p>
       </div>
       <TodoForm
         onSubmit={handleSubmit}
