@@ -62,7 +62,7 @@ const TodoColumn: FC<DNDColumnProps> = ({
   return (
     <div
       key={key}
-      className={"flex-1 rounded-md px-3 py-4 h-full min-w-60 max-w-96"}
+      className={"flex-1 rounded-md px-3 pb-4 h-full min-w-60 max-w-96"}
     >
       <div className="uppercase text-slate-600 px-3">{key}</div>
       <div
