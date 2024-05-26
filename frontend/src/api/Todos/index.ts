@@ -1,11 +1,11 @@
-import { CreateTodo, UpdateTodo } from 'dtos';
+import { CreateTodo, UpdateTodo } from "dtos";
 import Fetch from "@/FetchWrapper";
-import { Todo, TodosFilter } from "./types";
+import { Todo, FilterAndSort } from "./types";
 
 export const getTodos = async (
-  filter?: Partial<TodosFilter>
+  filter?: Partial<FilterAndSort>
 ): Promise<Todo[]> => {
-  return Fetch.get("/todos", filter);
+  return Fetch.get("/todos", { filter });
 };
 
 export const createTodo = async (data: CreateTodo): Promise<Todo> => {

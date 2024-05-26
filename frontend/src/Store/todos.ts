@@ -1,6 +1,6 @@
 import { defaultTodoStatuses } from "./../types";
 import { createTodo, getTodos, updateTodo } from "@/api/Todos";
-import { Todo } from "@/api/Todos/types";
+import { FilterAndSort, Todo } from "@/api/Todos/types";
 import { CreateTodo, UpdateTodo } from "dtos";
 import { StateCreator } from "zustand";
 import { GlobalStore } from ".";
@@ -9,12 +9,14 @@ import { User } from "@/api/Auth/types";
 type GroupedTodos = Record<string, Todo[]>;
 
 export interface TodosSlice {
+  filter?: Partial<FilterAndSort>;
+  setFilter: (filter: Partial<FilterAndSort>) => void;
   groupedTodos: GroupedTodos;
   setGroupedTodos: (groupedTodos: GroupedTodos) => void;
   addToGroup: (group: string, todos: Todo[]) => void;
   createTodo: (todoData: CreateTodo) => Promise<void>;
   updateTodo: (todoData: UpdateTodo) => Promise<void>;
-  getAllTodos: () => Promise<void>;
+  getTodosBasedOnFilter: () => Promise<void>;
 }
 
 export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
@@ -54,10 +56,10 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
     setGroupedTodos({ ...groupedTodos });
     addToGroup(todo.status, [todo]);
   },
-  getAllTodos: async () => {
-    const { setGroupedTodos } = getSliceState();
+  getTodosBasedOnFilter: async () => {
+    const { setGroupedTodos, filter } = getSliceState();
     const { user } = state.getState();
-    const todos = await getTodos();
+    const todos = await getTodos(filter);
     const groupedTodos: GroupedTodos = getDefaultGroup(user);
     todos.forEach((item) => {
       if (!groupedTodos[item.status]?.length) {
@@ -66,6 +68,9 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
       groupedTodos[item.status].push(item);
     });
     setGroupedTodos(groupedTodos);
+  },
+  setFilter: (filter) => {
+    set({ filter });
   },
 });
 

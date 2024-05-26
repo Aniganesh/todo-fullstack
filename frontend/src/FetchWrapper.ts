@@ -68,7 +68,8 @@ class FetchWrapper {
     const _params = new URLSearchParams("");
     if (params)
       Object.entries(params).forEach(([key, value]) => {
-        _params.set(key, value);
+        if (typeof value === "string") _params.set(key, value);
+        else _params.set(key, JSON.stringify(value));
       });
     const res = await fetch(
       `${_baseURL}${_url}${params ? "?" + _params.toString() : ""}`,

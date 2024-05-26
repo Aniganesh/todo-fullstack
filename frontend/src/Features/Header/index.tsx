@@ -29,7 +29,7 @@ const Header: FC<HeaderProps> = () => {
   };
 
   return (
-    <div className="py-4 px-6 flex justify-between">
+    <div className="py-4 px-6 flex justify-between shadow-md items-center rounded-b-md">
       <span className="text-2xl">Todo app</span>
       <div className="flex gap-4">
         {!user ? (
