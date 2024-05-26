@@ -64,9 +64,10 @@ class FetchWrapper {
         ? this.baseURL.slice(0, -1)
         : this.baseURL;
     const _url = url[0] === "/" ? url : "/" + url;
+
     const _params = new URLSearchParams("");
     if (params)
-      Object.keys(params).forEach(([key, value]) => {
+      Object.entries(params).forEach(([key, value]) => {
         _params.set(key, value);
       });
     const res = await fetch(
