@@ -22,7 +22,7 @@ export class TodosService {
       .createQueryBuilder('todos')
       .andWhere('todos.userId=:id', { id: user.id });
     if (filter) {
-      if (filter.status) {
+      if (filter.status && filter.status.length) {
         const q: [string, object] =
           typeof filter.status === 'string'
             ? [`todos.status=:status`, { status: filter.status }]
