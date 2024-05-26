@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -38,20 +38,15 @@ const TodoForm: FC<TodoFormProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { setValue, register, handleSubmit, getValues, reset } = useForm({
+  const { control, register, handleSubmit, reset } = useForm({
     defaultValues: { ...defaultValue, ...todo },
   });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { ref: _, ...statusRegProps } = register("status", { required: true });
 
-  const setStatus = (value: string) => {
-    setValue("status", value);
-  };
-  const status = getValues().status;
   const handleClose = () => {
     onClose();
     reset();
   };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -83,20 +78,26 @@ const TodoForm: FC<TodoFormProps> = ({
             {...register("description", { required: true })}
           />
         </motion.div>
-        <Select {...statusRegProps} onValueChange={setStatus} value={status}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select status"></SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={defaultTodoStatuses.todo}>To do</SelectItem>
-            <SelectItem value={defaultTodoStatuses.inProgress}>
-              In Progress
-            </SelectItem>
-            <SelectItem value={defaultTodoStatuses.complete}>
-              Completed
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <Controller
+          {...register("status", { required: true })}
+          control={control}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select status"></SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={defaultTodoStatuses.todo}>To do</SelectItem>
+                <SelectItem value={defaultTodoStatuses.inProgress}>
+                  In Progress
+                </SelectItem>
+                <SelectItem value={defaultTodoStatuses.complete}>
+                  Completed
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
         <Button type="submit">{submitText}</Button>
       </form>
     </Modal>
