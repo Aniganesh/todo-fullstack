@@ -6,4 +6,5 @@ export interface CreateTodo {
 
 export type UpdateTodo = { id: string } & Partial<CreateTodo>;
 
-export type TodoFilter = { status: string };
+// Update to allow filtering by multiple statuses.
+export type TodoFilter = { status: string | string[] };

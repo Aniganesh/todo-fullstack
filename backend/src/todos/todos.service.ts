@@ -22,7 +22,20 @@ export class TodosService {
       .createQueryBuilder('todos')
       .andWhere('todos.userId=:id', { id: user.id });
     if (filter) {
-      query.andWhere('todos.status=:status', { status: filter.status });
+      if (filter.status) {
+        const q: [string, object] =
+          typeof filter.status === 'string'
+            ? [`todos.status=:status`, { status: filter.status }]
+            : [
+                filter.status
+                  .map((_, i) => `todos.status=:status${i}`)
+                  .join(' OR '),
+                Object.fromEntries(
+                  filter.status.map((status, i) => [[`status${i}`], status]),
+                ),
+              ];
+        query.andWhere(...q);
+      }
     }
 
     if (sort) {
@@ -30,6 +43,7 @@ export class TodosService {
         query.addOrderBy(`todos.${key}`, value);
       });
     }
+
     return query.getMany();
   }
 
