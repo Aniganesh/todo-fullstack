@@ -19,12 +19,10 @@ const AddNewTodo: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 max-w-64 shadow-lg rounded-md transition-all">
-      {!showForm && (
-        <Button onClick={toggle} variant="outline">
-          Add New
-        </Button>
-      )}
+    <div className="flex flex-col gap-4 max-w-64 transition-all">
+      <Button onClick={toggle} variant="outline">
+        Add New
+      </Button>
 
       <TodoForm
         isOpen={showForm}
