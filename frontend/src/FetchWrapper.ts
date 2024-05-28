@@ -69,7 +69,9 @@ class FetchWrapper {
     if (params)
       Object.entries(params).forEach(([key, value]) => {
         if (typeof value === "string") _params.set(key, value);
-        else _params.set(key, JSON.stringify(value));
+        else if (value) {
+          _params.set(key, JSON.stringify(value));
+        }
       });
     const res = await fetch(
       `${_baseURL}${_url}${params ? "?" + _params.toString() : ""}`,

@@ -1,11 +1,13 @@
 import { CreateTodo, UpdateTodo } from "dtos";
 import Fetch from "@/FetchWrapper";
 import { Todo, FilterAndSort } from "./types";
+import { DeepPartial } from "react-hook-form";
 
 export const getTodos = async (
-  filter?: Partial<FilterAndSort>
+  filter?: DeepPartial<FilterAndSort>["filter"],
+  sort?: DeepPartial<FilterAndSort>["sort"]
 ): Promise<Todo[]> => {
-  return Fetch.get("/todos", { filter });
+  return Fetch.get("/todos", { filter, sort });
 };
 
 export const createTodo = async (data: CreateTodo): Promise<Todo> => {

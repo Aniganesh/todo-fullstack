@@ -9,7 +9,7 @@ interface LoaderData {
 const RootLayout: FC = () => {
   const loaderData = useLoaderData() as LoaderData;
 
-  const filter = useStore((state) => state.filter);
+  const filter = useStore((state) => state.filterAndSort);
   const getTodosBasedOnFilter = useStore(
     (state) => state.getTodosBasedOnFilter
   );

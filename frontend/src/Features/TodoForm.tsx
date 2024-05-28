@@ -46,6 +46,10 @@ const TodoForm: FC<TodoFormProps> = ({
     onClose();
     reset();
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { ref: _ref, ...statusRegisterProps } = {
+    ...register("status", { required: true }),
+  };
 
   return (
     <Modal
@@ -79,7 +83,7 @@ const TodoForm: FC<TodoFormProps> = ({
           />
         </motion.div>
         <Controller
-          {...register("status", { required: true })}
+          {...statusRegisterProps}
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>

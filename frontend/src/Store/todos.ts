@@ -5,12 +5,14 @@ import { CreateTodo, UpdateTodo } from "dtos";
 import { StateCreator } from "zustand";
 import { GlobalStore } from ".";
 import { User } from "@/api/Auth/types";
+import { DeepPartial } from "react-hook-form";
+import { merge } from "@/lib/utils";
 
 type GroupedTodos = Record<string, Todo[]>;
 
 export interface TodosSlice {
-  filter?: Partial<FilterAndSort>;
-  setFilter: (filter: Partial<FilterAndSort>) => void;
+  filterAndSort?: DeepPartial<FilterAndSort>;
+  updateFilter: (filter: DeepPartial<FilterAndSort>) => void;
   groupedTodos: GroupedTodos;
   setGroupedTodos: (groupedTodos: GroupedTodos) => void;
   addToGroup: (group: string, todos: Todo[]) => void;
@@ -43,23 +45,14 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
     addToGroup(todo.status, [todo]);
   },
   updateTodo: async (todoData) => {
-    const { groupedTodos, setGroupedTodos, addToGroup } = getSliceState();
-    const todo = (await updateTodo(todoData)) as Todo;
-    Object.entries(groupedTodos).forEach(([group, list]) => {
-      const index = list.findIndex((t) => todo.id === t.id);
-      if (index > -1) {
-        list.splice(index, 1);
-      }
-      groupedTodos[group] = list;
-    });
-
-    setGroupedTodos({ ...groupedTodos });
-    addToGroup(todo.status, [todo]);
+    const { getTodosBasedOnFilter } = getSliceState();
+    await updateTodo(todoData);
+    getTodosBasedOnFilter();
   },
   getTodosBasedOnFilter: async () => {
-    const { setGroupedTodos, filter } = getSliceState();
+    const { setGroupedTodos, filterAndSort: filter } = getSliceState();
     const { user } = state.getState();
-    const todos = await getTodos(filter);
+    const todos = await getTodos(filter?.filter, filter?.sort);
     const groupedTodos: GroupedTodos = getDefaultGroup(user);
     todos.forEach((item) => {
       if (!groupedTodos[item.status]?.length) {
@@ -69,8 +62,9 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
     });
     setGroupedTodos(groupedTodos);
   },
-  setFilter: (filter) => {
-    set({ filter });
+  updateFilter: (filter) => {
+    const { filterAndSort: current } = getSliceState();
+    set({ filterAndSort: merge(current ?? {}, filter) });
   },
 });
 
