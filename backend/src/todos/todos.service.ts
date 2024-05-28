@@ -5,7 +5,7 @@ import { CreateTodoForUser } from 'src/dtos/todo';
 import { EntitySort } from 'src/models/base.entity';
 import { Todo } from 'src/models/todos.entity';
 import { Users } from 'src/models/users.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class TodosService {
@@ -15,7 +15,7 @@ export class TodosService {
 
   public async getAllForUser(
     user: Users,
-    filter?: TodoFilter,
+    filter?: Partial<TodoFilter>,
     sort?: EntitySort,
   ) {
     const query = this.repo
@@ -36,6 +36,13 @@ export class TodosService {
               ];
         query.andWhere(...q);
       }
+    }
+
+    if (filter.contains) {
+      query.andWhere([
+        { title: Like(`%${filter.contains}%`) },
+        { description: Like(`%${filter.contains}%`) },
+      ]);
     }
 
     if (sort) {

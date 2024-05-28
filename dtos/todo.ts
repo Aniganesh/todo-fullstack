@@ -6,4 +6,4 @@ export interface CreateTodo {
 
 export type UpdateTodo = { id: string } & Partial<CreateTodo>;
 
-export type TodoFilter = { status: string | string[] };
+export type TodoFilter = { status: string | string[], contains: string; };
