@@ -20,7 +20,7 @@ export const LoginForm: FC<LoginFormProps> = ({ switchForms }) => {
 
   return (
     <form
-      className="flex flex-col gap-4 border border-gray-200 p-4 rounded-md bg-slate-50 text-2xl"
+      className="flex flex-col gap-4 p-4 rounded-md text-2xl"
       onSubmit={handleSubmit(login)}
     >
       <Label className="text-2xl">Email</Label>

@@ -45,7 +45,11 @@ const Header: FC<HeaderProps> = () => {
           <AuthUser />
         )}
       </div>
-      <Modal isOpen={!!modal} onClose={closeModal}>
+      <Modal
+        isOpen={!!modal}
+        onClose={closeModal}
+        contentClass="border-gray-200 bg-slate-50"
+      >
         {modal === "login" && <LoginForm switchForms={switchForm} />}
         {modal === "signup" && <SignupForm switchForms={switchForm} />}
       </Modal>
