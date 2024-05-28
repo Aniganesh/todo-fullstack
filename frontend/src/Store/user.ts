@@ -9,7 +9,7 @@ export interface UserSlice {
   user?: User;
   setUser: (user?: User) => void;
   token?: string;
-  setToken: (token: string) => void;
+  setToken: (token?: string) => void;
   login: (loginData: LoginData) => Promise<void>;
   fetchMe: () => Promise<User | undefined>;
   signup: (signupData: CreateUser) => Promise<void>;
@@ -24,7 +24,9 @@ export const createUserSlice: StateCreator<GlobalStore, [], [], UserSlice> = (
     set({ user });
   },
   setToken: (token) => {
-    Fetch.setCommonHeaders({ Authorization: `Bearer ${token}` });
+    Fetch.setCommonHeaders({
+      Authorization: token ? `Bearer ${token}` : undefined,
+    });
     set({ token });
   },
   fetchMe: async () => {
