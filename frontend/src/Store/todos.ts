@@ -67,9 +67,8 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
     newFilter.filter = filterAndSort.filter
       ? { ...current?.filter, ...filterAndSort.filter }
       : undefined;
-    newFilter.sort = filterAndSort.sort
-      ? { ...(current?.sort ?? {}), ...filterAndSort.sort }
-      : undefined;
+    newFilter.sort = filterAndSort.sort;
+
     set({ filterAndSort: newFilter });
   },
 });
