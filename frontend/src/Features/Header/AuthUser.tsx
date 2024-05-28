@@ -83,7 +83,7 @@ const AuthUser: FC<AuthUserProps> = () => {
         </Tabs>
         <Button
           variant="destructive"
-          className="ml-auto mr-4 mb-4 mt-auto"
+          className="ml-auto mr-1 mb-1 mt-auto"
           onClick={logout}
         >
           Logout
