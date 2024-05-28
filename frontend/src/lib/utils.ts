@@ -5,19 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const merge = (input1: object, input2: object) => {
-  const keys = Object.keys(input1).concat(Object.keys(input2));
-  const res: Record<string, unknown> = {};
-  keys.forEach((key) => {
-    if (
-      typeof input1[key as keyof typeof input1] === "object" &&
-      typeof input2[key as keyof typeof input2] === "object"
-    ) {
-      res[key] = merge(
-        input1[key as keyof typeof input1],
-        input2[key as keyof typeof input2]
-      );
-    } else res[key] = input2[key as keyof typeof input2];
-  });
-  return res;
-};
+export function debounce<Args = unknown, Response = unknown>(
+  func: (...args: Args[]) => Response | Promise<Response>,
+  timeout = 300
+) {
+  let timer: NodeJS.Timeout;
+  return (...args: Args[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      // @ts-expect-error the error is the actual behaviour we need.
+      func.apply(this, args);
+    }, timeout);
+  };
+}

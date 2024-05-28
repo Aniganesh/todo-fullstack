@@ -1,9 +1,8 @@
 import { useStore } from "@/Store";
 import { Button } from "@/components/ui/button";
-import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Filter, SortAscIcon, SortDescIcon } from "lucide-react";
-import { ValueOf } from "@/types";
 import { defaultTodoStatuses } from "@/types";
 import clsx from "clsx";
 import { type FilterAndSort as IFilterAndSort } from "@/api/Todos/types";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { SelectContent } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
+import { debounce } from "@/lib/utils";
 
 interface FilterAndSortProps {}
 
@@ -24,22 +24,16 @@ const labels: Record<keyof typeof defaultTodoStatuses, string> = {
   todo: "To do",
 };
 
+
 const FilterAndSort: FC<FilterAndSortProps> = () => {
   const filterAndSort = useStore((state) => state.filterAndSort);
   const updateFilter = useStore((state) => state.updateFilterAndSort);
 
   const appliedSort = filterAndSort?.sort;
-  const initialSortType = Object.keys(
-    appliedSort ?? {}
-  )?.[0] as keyof IFilterAndSort["sort"];
 
-  const [sortType, setSortType] = useState<
-    keyof IFilterAndSort["sort"] | undefined
-  >(initialSortType ?? undefined);
-
-  const [sortDir, setSortDir] = useState<
-    ValueOf<IFilterAndSort["sort"]> | undefined
-  >(appliedSort?.createDateTime ?? appliedSort?.lastChangedDateTime);
+  const [sortType, setSortType] = useState<string | undefined>(
+    getSortTypeString(appliedSort) ?? undefined
+  );
 
   const toggleStatusFilter = useCallback(
     (value: string) => {
@@ -80,23 +74,33 @@ const FilterAndSort: FC<FilterAndSortProps> = () => {
   );
 
   const setSort = useCallback(
-    (value?: IFilterAndSort["sort"]) => {
-      updateFilter({ sort: value });
+    (value: string) => {
+      let sort: IFilterAndSort["sort"] = {};
+      setSortType(value);
+      switch (value) {
+        case "recently-created-last":
+          sort = { createDateTime: "ASC" };
+          break;
+        case "recently-created-first":
+          sort = { createDateTime: "DESC" };
+          break;
+        case "recently-updated-last":
+          sort = { lastChangedDateTime: "ASC" };
+          break;
+        case "recently-updated-first":
+          sort = { lastChangedDateTime: "DESC" };
+          break;
+      }
+      if (sort) {
+        updateFilter({ sort });
+      }
     },
     [updateFilter]
   );
-  useEffect(() => {
-    if (sortType && sortDir) {
-      setSort({ [sortType]: sortDir });
-    } else {
-      setSort(undefined);
-    }
-    return () => {};
-  }, [setSort, sortDir, sortType]);
 
   return (
-    <>
-      <Input onChange={setSearch} />
+    <div className="flex justify-center gap-4">
+      <Input onChange={debounce(setSearch)} className="max-w-32" placeholder="Search" />
       <Popover.Root>
         <Popover.Trigger asChild>
           <Button variant={"outline"}>
@@ -131,38 +135,45 @@ const FilterAndSort: FC<FilterAndSortProps> = () => {
 
       <div className="flex gap-4">
         <div className="relative">
-          <Select value={sortType} onValueChange={setSortType as never}>
+          <Select value={sortType} onValueChange={setSort}>
             <SelectTrigger>
-              <SelectValue placeholder="Choose sort field" />
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent side="bottom" className="bg-white">
-              <SelectItem value="createDateTime">Created</SelectItem>
-              <SelectItem value="lastChangedDateTime">Last updated</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="relative">
-          <Select value={sortDir} onValueChange={setSortDir as never}>
-            <SelectTrigger>
-              <SelectValue placeholder="Choose direction" />
-            </SelectTrigger>
-            <SelectContent side="bottom" className="bg-white">
-              <SelectItem value="ASC">
+              <SelectItem value="recently-created-last">
                 <div className="flex gap-2">
-                  <SortAscIcon /> Recent last
+                  <SortAscIcon /> Recently created last
                 </div>
               </SelectItem>
-              <SelectItem value="DESC">
+              <SelectItem value="recently-created-first">
                 <div className="flex gap-2">
-                  <SortDescIcon /> Recent first
+                  <SortDescIcon /> Recently created first
+                </div>
+              </SelectItem>
+              <SelectItem value="recently-updated-last">
+                <div className="flex gap-2">
+                  <SortAscIcon /> Recently updated last
+                </div>
+              </SelectItem>
+              <SelectItem value="recently-updated-first">
+                <div className="flex gap-2">
+                  <SortDescIcon /> Recently updated first
                 </div>
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default FilterAndSort;
+
+const getSortTypeString = (sort?: IFilterAndSort["sort"]) => {
+  if (sort?.createDateTime)
+    return `recently-created-${sort?.createDateTime === "ASC" ? "last" : "first"}`;
+  if (sort?.lastChangedDateTime)
+    return `recently-created-${sort?.lastChangedDateTime === "DESC" ? "last" : "first"}`;
+  return undefined;
+};
