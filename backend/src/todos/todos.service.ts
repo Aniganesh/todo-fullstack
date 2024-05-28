@@ -36,13 +36,12 @@ export class TodosService {
               ];
         query.andWhere(...q);
       }
-    }
-
-    if (filter.contains) {
-      query.andWhere([
-        { title: Like(`%${filter.contains}%`) },
-        { description: Like(`%${filter.contains}%`) },
-      ]);
+      if (filter.contains) {
+        query.andWhere([
+          { title: Like(`%${filter.contains}%`) },
+          { description: Like(`%${filter.contains}%`) },
+        ]);
+      }
     }
 
     if (sort) {
