@@ -21,6 +21,7 @@ const AuthUser: FC<AuthUserProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const user = useStore((state) => state.user);
+  const resetAuthData = useStore((state) => state.resetAuthData);
   const updateUser = useStore((state) => state.updateUser);
 
   const { register, formState, handleSubmit, reset } = useForm<UpdateUser>({
@@ -33,6 +34,9 @@ const AuthUser: FC<AuthUserProps> = () => {
   const close = () => {
     reset();
     toggle();
+  };
+  const logout = () => {
+    resetAuthData();
   };
 
   return (
@@ -77,6 +81,7 @@ const AuthUser: FC<AuthUserProps> = () => {
             </TabsContent>
           </div>
         </Tabs>
+        <Button onClick={logout}>Logout</Button>
       </Modal>
     </>
   );

@@ -10,6 +10,7 @@ export interface UserSlice {
   setUser: (user?: User) => void;
   token?: string;
   setToken: (token?: string) => void;
+  resetAuthData: () => void;
   login: (loginData: LoginData) => Promise<void>;
   fetchMe: () => Promise<User | undefined>;
   signup: (signupData: CreateUser) => Promise<void>;
@@ -58,5 +59,11 @@ export const createUserSlice: StateCreator<GlobalStore, [], [], UserSlice> = (
     const { setUser } = getStore();
     const user = await updateUser(data);
     setUser(user);
+  },
+  resetAuthData: () => {
+    const { setUser, setToken, setGroupedTodos } = getStore();
+    setUser();
+    setToken();
+    setGroupedTodos({});
   },
 });
