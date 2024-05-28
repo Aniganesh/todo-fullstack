@@ -10,13 +10,16 @@ const RootLayout: FC = () => {
   const loaderData = useLoaderData() as LoaderData;
 
   const filter = useStore((state) => state.filterAndSort);
+  const user = useStore((state) => state.user);
   const getTodosBasedOnFilter = useStore(
     (state) => state.getTodosBasedOnFilter
   );
 
   useEffect(() => {
-    getTodosBasedOnFilter();
-  }, [filter, getTodosBasedOnFilter]);
+    if (user) {
+      getTodosBasedOnFilter();
+    }
+  }, [filter, user, getTodosBasedOnFilter]);
 
   return (
     <Suspense>
