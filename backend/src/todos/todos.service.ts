@@ -60,9 +60,10 @@ export class TodosService {
     return this.repo.save(todo);
   }
 
-  public async updateOne({ id, ...otherData }: UpdateTodo) {
-    return this.repo.update(id, otherData);
+  public async updateOne(updateDto: UpdateTodo) {
+    return this.repo.save(updateDto);
   }
+
   public async deleteOne(id: string) {
     return this.repo.delete(id);
   }

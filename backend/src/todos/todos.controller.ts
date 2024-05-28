@@ -75,12 +75,13 @@ export class TodosController {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     }
     const updateResult = await this.todosService.updateOne(data);
-    if (updateResult.affected) return this.getTodo(data.id);
-    else
-      throw new HttpException(
-        'Could not find task to update',
-        HttpStatus.NOT_FOUND,
-      );
+    return updateResult;
+    // if (updateResult.affected) return this.getTodo(data.id);
+    // else
+    //   throw new HttpException(
+    //     'Could not find task to update',
+    //     HttpStatus.NOT_FOUND,
+    //   );
   }
 
   @Delete(':id')
