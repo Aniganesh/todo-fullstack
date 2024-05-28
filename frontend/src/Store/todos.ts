@@ -6,13 +6,12 @@ import { StateCreator } from "zustand";
 import { GlobalStore } from ".";
 import { User } from "@/api/Auth/types";
 import { DeepPartial } from "react-hook-form";
-import { merge } from "@/lib/utils";
 
 type GroupedTodos = Record<string, Todo[]>;
 
 export interface TodosSlice {
   filterAndSort?: DeepPartial<FilterAndSort>;
-  updateFilter: (filter: DeepPartial<FilterAndSort>) => void;
+  updateFilterAndSort: (filter: DeepPartial<FilterAndSort>) => void;
   groupedTodos: GroupedTodos;
   setGroupedTodos: (groupedTodos: GroupedTodos) => void;
   addToGroup: (group: string, todos: Todo[]) => void;
@@ -62,9 +61,16 @@ export const createTodosSlice: StateCreator<GlobalStore, [], [], TodosSlice> = (
     });
     setGroupedTodos(groupedTodos);
   },
-  updateFilter: (filter) => {
+  updateFilterAndSort: (filterAndSort) => {
     const { filterAndSort: current } = getSliceState();
-    set({ filterAndSort: merge(current ?? {}, filter) });
+    const newFilter = { ...current };
+    newFilter.filter = filterAndSort.filter
+      ? { ...current?.filter, ...filterAndSort.filter }
+      : undefined;
+    newFilter.sort = filterAndSort.sort
+      ? { ...(current?.sort ?? {}), ...filterAndSort.sort }
+      : undefined;
+    set({ filterAndSort: newFilter });
   },
 });
 

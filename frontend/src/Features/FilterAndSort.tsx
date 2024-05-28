@@ -1,6 +1,6 @@
 import { useStore } from "@/Store";
 import { Button } from "@/components/ui/button";
-import { FC, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Filter, SortAscIcon, SortDescIcon } from "lucide-react";
 import { ValueOf } from "@/types";
@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectContent } from "@radix-ui/react-select";
+import { Input } from "@/components/ui/input";
 
 interface FilterAndSortProps {}
 
@@ -25,14 +26,17 @@ const labels: Record<keyof typeof defaultTodoStatuses, string> = {
 
 const FilterAndSort: FC<FilterAndSortProps> = () => {
   const filterAndSort = useStore((state) => state.filterAndSort);
-  const updateFilter = useStore((state) => state.updateFilter);
+  const updateFilter = useStore((state) => state.updateFilterAndSort);
+
   const appliedSort = filterAndSort?.sort;
   const initialSortType = Object.keys(
     appliedSort ?? {}
   )?.[0] as keyof IFilterAndSort["sort"];
+
   const [sortType, setSortType] = useState<
     keyof IFilterAndSort["sort"] | undefined
   >(initialSortType ?? undefined);
+
   const [sortDir, setSortDir] = useState<
     ValueOf<IFilterAndSort["sort"]> | undefined
   >(appliedSort?.createDateTime ?? appliedSort?.lastChangedDateTime);
@@ -68,6 +72,13 @@ const FilterAndSort: FC<FilterAndSortProps> = () => {
     [filterAndSort?.filter?.status, updateFilter]
   );
 
+  const setSearch = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      updateFilter({ filter: { contains: e.target.value } });
+    },
+    [updateFilter]
+  );
+
   const setSort = useCallback(
     (value?: IFilterAndSort["sort"]) => {
       updateFilter({ sort: value });
@@ -85,6 +96,7 @@ const FilterAndSort: FC<FilterAndSortProps> = () => {
 
   return (
     <>
+      <Input onChange={setSearch} />
       <Popover.Root>
         <Popover.Trigger asChild>
           <Button variant={"outline"}>
