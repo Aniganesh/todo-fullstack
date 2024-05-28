@@ -75,7 +75,6 @@ const FilterAndSort: FC<FilterAndSortProps> = () => {
     [updateFilter]
   );
   useEffect(() => {
-    console.log("effect");
     if (sortType && sortDir) {
       setSort({ [sortType]: sortDir });
     } else {
