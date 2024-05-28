@@ -6,7 +6,7 @@ interface TopbarProps {}
 
 const Topbar: FC<TopbarProps> = () => {
   return (
-    <div className="flex justify-center gap-4 py-2">
+    <div className="flex justify-between pb-2 pt-8 mx-auto max-w-7xl">
       <AddNewTodo />
       <FilterAndSort />
     </div>
