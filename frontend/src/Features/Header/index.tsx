@@ -12,7 +12,9 @@ const Header: FC<HeaderProps> = () => {
   const user = useStore((state) => state.user);
 
   const [modal, setModal] = useState<"login" | "signup" | undefined>();
-
+  if (user && modal) {
+    setModal(undefined);
+  }
   const openLoginModal = () => {
     setModal("login");
   };
