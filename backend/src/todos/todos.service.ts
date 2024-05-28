@@ -62,7 +62,8 @@ export class TodosService {
 
   public async createOne(todoDto: CreateTodoForUser) {
     const todo = this.repo.create(todoDto);
-    return this.repo.save(todo);
+    const savedValue = await this.repo.save(todo);
+    return this.repo.findOneBy({ id: savedValue.id });
   }
 
   public async updateOne(updateDto: UpdateTodo) {

@@ -72,6 +72,8 @@ export class TodosController {
     try {
       schema.parse(data);
     } catch (err) {
+      console.error(err);
+      console.log(data);
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     }
     const updateResult = await this.todosService.updateOne(data);
