@@ -5,7 +5,7 @@ import { CreateTodoForUser } from 'src/dtos/todo';
 import { EntitySort } from 'src/models/base.entity';
 import { Todo } from 'src/models/todos.entity';
 import { Users } from 'src/models/users.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TodosService {
@@ -37,10 +37,9 @@ export class TodosService {
         query.andWhere(...q);
       }
       if (filter.contains) {
-        query.andWhere([
-          { title: Like(`%${filter.contains}%`) },
-          { description: Like(`%${filter.contains}%`) },
-        ]);
+        query.andWhere(
+          `(LOWER(todos.title) LIKE '%${filter.contains.toLowerCase()}%' OR LOWER(todos.description) LIKE '%${filter.contains.toLowerCase()}%')`,
+        );
       }
     }
 
