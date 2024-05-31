@@ -5,3 +5,107 @@
 * {
 	box-sizing: border-box;
 }
+
+:root {
+	--toastify-color-light: #fff;
+	--toastify-color-dark: #121212;
+	--toastify-color-info: #3498db;
+	--toastify-color-success: #07bc0c;
+	--toastify-color-warning: #f1c40f;
+	--toastify-color-error: #e74c3c;
+	--toastify-color-transparent: rgba(255, 255, 255, 0.7);
+
+	--toastify-icon-color-info: var(--toastify-color-info);
+	--toastify-icon-color-success: var(--toastify-color-success);
+	--toastify-icon-color-warning: var(--toastify-color-warning);
+	--toastify-icon-color-error: var(--toastify-color-error);
+
+	--toastify-toast-width: 320px;
+	--toastify-toast-background: #fff;
+	--toastify-toast-min-height: 64px;
+	--toastify-toast-max-height: 800px;
+	--toastify-font-family: sans-serif;
+	--toastify-z-index: 9999;
+
+	--toastify-text-color-light: #757575;
+	--toastify-text-color-dark: #fff;
+
+	--toastify-text-color-info: #fff;
+	--toastify-text-color-success: #fff;
+	--toastify-text-color-warning: #fff;
+	--toastify-text-color-error: #fff;
+
+	--toastify-spinner-color: #616161;
+	--toastify-spinner-color-empty-area: #e0e0e0;
+
+
+	--toastify-color-progress-light: linear-gradient(to right,
+			#4cd964,
+			#5ac8fa,
+			#007aff,
+			#34aadc,
+			#5856d6,
+			#ff2d55);
+	/*  Used when no type is provided */
+	--toastify-color-progress-dark: #bb86fc;
+	--toastify-color-progress-info: var(--toastify-color-info);
+	--toastify-color-progress-success: var(--toastify-color-success);
+	--toastify-color-progress-warning: var(--toastify-color-warning);
+	--toastify-color-progress-error: var(--toastify-color-error);
+
+	/* used to control the opacity of the progress trail */
+	--toastify-color-progress-bgo: .2;
+}
+
+/** Classes for the displayed toast **/
+.Toastify__toast {}
+
+.Toastify__toast--rtl {}
+
+.Toastify__toast-body {}
+
+/** Used to position the icon **/
+.Toastify__toast-icon {}
+
+/** handle the notification color and the text color based on the theme **/
+.Toastify__toast-theme--dark {}
+
+.Toastify__toast-theme--light {}
+
+.Toastify__toast-theme--colored.Toastify__toast--default {}
+
+.Toastify__toast-theme--colored.Toastify__toast--info {}
+
+.Toastify__toast-theme--colored.Toastify__toast--success {
+	background: var(--toastify-color-success);
+	color: white
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--warning {
+	background: var(--toastify-color-warning);
+	color: white
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--error {
+	background: var(--toastify-color-error);
+	color: white
+}
+
+.Toastify__progress-bar {}
+
+/** Classes for the close button. Better use your own closeButton **/
+.Toastify__close-button {
+	align-self: center;
+	width: 40px;
+	height: 40px;
+}
+
+.Toastify__close-button--default {}
+
+.Toastify__close-button>svg {
+	width: 28px;
+	height: 28px;
+}
+
+.Toastify__close-button:hover,
+.Toastify__close-button:focus {}

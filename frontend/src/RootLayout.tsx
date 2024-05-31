@@ -2,6 +2,8 @@ import { FC, Suspense, useEffect } from "react";
 import { Await, Outlet, useLoaderData } from "react-router-dom";
 import Header from "./Features/Header";
 import { useStore } from "./Store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface LoaderData {
   fetchMe: () => Promise<void>;
@@ -26,6 +28,13 @@ const RootLayout: FC = () => {
       <Await resolve={loaderData.fetchMe}>
         <Header />
         <Outlet />
+        <ToastContainer
+          position="top-right"
+          hideProgressBar
+          pauseOnHover={true}
+          autoClose={100000}
+          theme="colored"
+        />
       </Await>
     </Suspense>
   );

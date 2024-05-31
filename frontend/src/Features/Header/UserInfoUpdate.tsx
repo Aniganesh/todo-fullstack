@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { useStore } from "@/Store";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
+import { toast } from "react-toastify";
 
 const defaultValues = {
   name: "",
@@ -28,7 +29,19 @@ const UserInfoUpdate: FC<UserInfoUpdateProps> = () => {
     defaultValues: { ...defaultValues, name: user?.name },
   });
 
-  const onChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUpdateUser = (values: UpdateUser) => {
+    updateUser(values)
+      .then(() => {
+        toast.success("User successfully updated");
+      })
+      .catch(() => {
+        toast.error("Unable to update user details. Please try again later.");
+      });
+  };
+
+  const imageInputOnChangeHandler = async (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files?.length) {
       setIsChangingProfileImage(true);
       try {
@@ -77,26 +90,28 @@ const UserInfoUpdate: FC<UserInfoUpdateProps> = () => {
             accept="image/*"
             className="absolute inset-0 opacity-0 "
             title=""
-            onChange={onChangeHandler}
+            onChange={imageInputOnChangeHandler}
           />
         </div>
-        <button
-          className="absolute -bottom-2 -right-2 rounded-full w-fit h-fit p-1 bg-red-400"
-          onClick={onRemoveProfileImage}
-        >
-          <X className="size-4 text-white" />
-        </button>
+        {!!user?.profileImage && (
+          <button
+            className="absolute -bottom-2 -right-2 rounded-full w-fit h-fit p-1 bg-red-400"
+            onClick={onRemoveProfileImage}
+          >
+            <X className="size-4 text-white" />
+          </button>
+        )}
       </div>
       <form
         className="flex flex-col gap-4 "
-        onSubmit={handleSubmit(updateUser)}
+        onSubmit={handleSubmit(handleUpdateUser)}
       >
         <Label>Name</Label>
         <Input {...register("name", { required: true })} />
         <Button type="submit" disabled={formState.isSubmitting}>
           {formState.isSubmitting && (
             <CircularProgress className="size-5 mr-4" />
-          )}{" "}
+          )}
           Save
         </Button>
       </form>
