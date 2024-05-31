@@ -9,6 +9,23 @@ export type SupportedMethod =
   | "patch";
 
 export type Params = object;
+
+export type Headers = object;
+
+export type CommonProps = {
+  method: SupportedMethod;
+  url: string;
+  headers?: Headers;
+  params?: Params;
+};
+
+export type UpdateMethodProps<Data = object> = {
+  data?: Data;
+};
+
+type AllRequestProps<Data = object> = CommonProps &
+  Partial<UpdateMethodProps<Data>>;
+
 class FetchWrapper {
   baseURL: string;
   commonHeaders?: Record<string, string> = {
@@ -29,23 +46,10 @@ class FetchWrapper {
     this.commonHeaders = newHeaders as Record<string, string>;
   };
 
-  request = async <ExpectedResponse, Data = never>({
-    method,
-    url,
-    data,
-    params,
-  }: {
-    method: SupportedMethod;
-    url: string;
-    data?: Data;
-    params?: Params;
-  }): Promise<Awaited<ExpectedResponse>> => {
-    return await this._request<ExpectedResponse, Data>({
-      method,
-      url,
-      data,
-      params,
-    });
+  request = async <ExpectedResponse, Data = never>(
+    props: AllRequestProps<Data>
+  ): Promise<Awaited<ExpectedResponse>> => {
+    return await this._request<ExpectedResponse, Data>(props);
   };
 
   _request = async <ExpectedResponse, Data>({
@@ -53,11 +57,13 @@ class FetchWrapper {
     url,
     data,
     params,
+    headers,
   }: {
     method: SupportedMethod;
     url: string;
     data?: Data;
     params?: Params;
+    headers?: object;
   }): Promise<Awaited<ExpectedResponse>> => {
     const _baseURL =
       this.baseURL[this.baseURL.length - 1] === "/"
@@ -73,12 +79,20 @@ class FetchWrapper {
           _params.set(key, JSON.stringify(value));
         }
       });
+    const _headers = { ...this.commonHeaders, ...headers };
+
+    Object.keys(_headers).forEach((key) => {
+      if (_headers[key] === undefined) {
+        delete _headers[key];
+      }
+    });
+
     const res = await fetch(
       `${_baseURL}${_url}${params ? "?" + _params.toString() : ""}`,
       {
         method,
         body: JSON.stringify(data),
-        headers: { ...this.commonHeaders },
+        headers: _headers,
       }
     );
     if (res.status >= 400) {
@@ -95,31 +109,31 @@ class FetchWrapper {
     return {} as Awaited<ExpectedResponse>;
   };
 
-  post = async <ExpectedResponse, Data>({
-    url,
-    data,
-  }: {
-    url: string;
-    data?: Data;
-  }) => {
-    return this.request<ExpectedResponse, Data>({ method: "POST", url, data });
+  post = async <ExpectedResponse, Data>(
+    props: UpdateMethodProps<Data> & Omit<CommonProps, "method">
+  ) => {
+    return this.request<ExpectedResponse, Data>({
+      ...props,
+      method: "POST",
+    });
   };
 
-  patch = async <ExpectedResponse, Data>({
-    url,
-    data,
-  }: {
-    url: string;
-    data?: Data;
-  }) => {
-    return this.request<ExpectedResponse, Data>({ method: "PATCH", url, data });
+  patch = async <ExpectedResponse, Data>(
+    props: UpdateMethodProps<Data> & Omit<CommonProps, "method">
+  ) => {
+    return this.request<ExpectedResponse, Data>({ ...props, method: "PATCH" });
   };
 
-  get = async <ExpectedResponse>(url: string, params?: Params) => {
+  get = async <ExpectedResponse>(
+    url: string,
+    params?: Params,
+    headers?: Headers
+  ) => {
     return this.request<ExpectedResponse, null>({
       method: "GET",
       url,
       params,
+      headers,
     });
   };
 }
