@@ -11,4 +11,7 @@ export class Users extends BaseEntity {
 
   @Column({ type: 'varchar', length: 512, select: false })
   password: string;
+
+  @Column({ type: 'json', nullable: true })
+  profileImage: object;
 }

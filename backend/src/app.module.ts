@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodosModule } from './todos/todos.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { ImageStorageModule } from './image-storage/image-storage.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     TodosModule,
     UsersModule,
+    ImageStorageModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

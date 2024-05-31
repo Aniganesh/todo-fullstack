@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash } from 'bcrypt';
-import { CreateUser, UpdateUser } from 'dtos';
+import { CreateUser } from 'dtos';
 import { Users } from 'src/models/users.entity';
 import { Repository } from 'typeorm';
 
@@ -44,7 +44,7 @@ export class UsersService {
     this.userRepo.update(userId, { password: hashedPassword });
   }
 
-  public async update(userId: string, data: UpdateUser) {
+  public async update(userId: string, data: Partial<Users>) {
     return this.userRepo.update(userId, data);
   }
 

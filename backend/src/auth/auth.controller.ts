@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { CreateUser, PasswordChange, UpdateUser } from 'dtos';
+import { CreateUser, PasswordChange } from 'dtos';
 import { LocalAuthGuard } from 'src/guards/local.guard';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
@@ -78,27 +78,5 @@ export class AuthController {
       return this.userService.changePassword(user.id, body.newPassword);
     }
     throw new UnauthorizedException();
-  }
-
-  @Post('user')
-  @UseGuards(JWTAuthGuard)
-  async updateUser(@Req() req, @Body() body: UpdateUser) {
-    try {
-      const schema = z.object({
-        name: z.string(),
-      });
-      schema.parse(body);
-    } catch (err) {
-      throw new HttpException(err.issues.toString(), HttpStatus.BAD_REQUEST);
-    }
-    const updateRes = await this.userService.update(req.user.id, body);
-    if (updateRes.affected) {
-      return this.userService.get(req.user.id);
-    } else {
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
   }
 }
