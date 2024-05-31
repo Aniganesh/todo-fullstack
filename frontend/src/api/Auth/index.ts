@@ -28,6 +28,18 @@ export const changePassword = async (
   return Fetch.post({ url: "/auth/password", data });
 };
 
-export const updateUser = (data: UpdateUser): Promise<User> => {
+export const updateUser = (data: Partial<UpdateUser>): Promise<User> => {
   return Fetch.post({ url: "/users", data });
+};
+
+export const uploadProfileImage = (file: File): Promise<User> => {
+  const data = new FormData();
+  data.append("file", file);
+  return Fetch.post({
+    url: "/users/profile-image",
+    headers: {
+      "Content-Type": undefined, // Remove content type as formData will take care of that by itself.
+    },
+    data,
+  });
 };

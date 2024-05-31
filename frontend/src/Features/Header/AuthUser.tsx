@@ -1,53 +1,47 @@
 import { useStore } from "@/Store";
-import { UpdateUser } from "dtos";
 import Modal from "@/components/Modal";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
 import { X } from "lucide-react";
 import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChangePassword from "./ChangePassword";
-import CircularProgress from "@/components/CircularProgress";
+import UserInfoUpdate from "./UserInfoUpdate";
 
 interface AuthUserProps {}
-
-const defaultValues = {
-  name: "",
-};
 
 const AuthUser: FC<AuthUserProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const user = useStore((state) => state.user);
   const resetAuthData = useStore((state) => state.resetAuthData);
-  const updateUser = useStore((state) => state.updateUser);
-
-  const { register, formState, handleSubmit, reset } = useForm<UpdateUser>({
-    defaultValues: { ...defaultValues, ...user },
-  });
 
   const toggle = () => {
     setIsOpen((curr) => !curr);
   };
+
   const close = () => {
-    reset();
     toggle();
   };
+  
   const logout = () => {
     resetAuthData();
   };
 
   return (
     <>
-      <p
-        className="hover:underline active:underline cursor-pointer"
+      <div
+        className="flex items-center gap-2 cursor-pointer"
         onClick={toggle}
         tabIndex={0}
       >
-        {user?.name}
-      </p>
+        <p className="hover:underline">{user?.name}</p>
+        {!!user?.profileImage?.secure_url && (
+          <img
+            src={user?.profileImage?.secure_url}
+            className="size-8 rounded-full overflow-clip object-cover"
+          />
+        )}
+      </div>
       <Modal isOpen={isOpen} onClose={close}>
         <button
           className="absolute top-1 right-1 rounded-md hover:bg-zinc-200 px-1 z-[1]"
@@ -62,19 +56,7 @@ const AuthUser: FC<AuthUserProps> = () => {
               <TabsTrigger value="Password">Change Password</TabsTrigger>
             </TabsList>
             <TabsContent value="User">
-              <form
-                className="flex flex-col gap-4 "
-                onSubmit={handleSubmit(updateUser)}
-              >
-                <Label>Name</Label>
-                <Input {...register("name", { required: true })} />
-                <Button type="submit" disabled={formState.isSubmitting}>
-                  {formState.isSubmitting && (
-                    <CircularProgress className="size-5 mr-4" />
-                  )}{" "}
-                  Save
-                </Button>
-              </form>
+              <UserInfoUpdate />
             </TabsContent>
             <TabsContent value="Password">
               <ChangePassword />

@@ -26,10 +26,14 @@ export type UpdateMethodProps<Data = object> = {
 type AllRequestProps<Data = object> = CommonProps &
   Partial<UpdateMethodProps<Data>>;
 
+export const CONTENT_TYPE_KEY = "Content-Type";
+
+export const JSON_CONTENT_TYPE = "application/json";
+
 class FetchWrapper {
   baseURL: string;
   commonHeaders?: Record<string, string> = {
-    "Content-Type": "application/json",
+    [CONTENT_TYPE_KEY]: JSON_CONTENT_TYPE,
   };
 
   constructor(baseURL: string) {
@@ -91,7 +95,10 @@ class FetchWrapper {
       `${_baseURL}${_url}${params ? "?" + _params.toString() : ""}`,
       {
         method,
-        body: JSON.stringify(data),
+        body:
+          _headers[CONTENT_TYPE_KEY] === JSON_CONTENT_TYPE
+            ? JSON.stringify(data)
+            : (data as BodyInit),
         headers: _headers,
       }
     );

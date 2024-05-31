@@ -14,7 +14,7 @@ export interface UserSlice {
   login: (loginData: LoginData) => Promise<void>;
   fetchMe: () => Promise<User | undefined>;
   signup: (signupData: CreateUser) => Promise<void>;
-  updateUser: (userData: UpdateUser) => Promise<void>;
+  updateUser: (userData: Partial<UpdateUser>) => Promise<void>;
 }
 
 export const createUserSlice: StateCreator<GlobalStore, [], [], UserSlice> = (
