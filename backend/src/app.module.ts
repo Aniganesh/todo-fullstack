@@ -19,7 +19,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
+        host: configService.get('DB_HOST') as string,
         port: +configService.get('DB_PORT'),
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),

@@ -2,14 +2,21 @@ FROM node:20 AS base
 
 # CONFIGURE PNPM STUFF
 ENV PNPM_HOME="/pnpm"
+
 ENV PATH="$PNPM_HOME:$PATH"
+
 RUN corepack enable
 
 # SETUP WORKDIR AND BUILD
-WORKDIR /app
-COPY . .
-RUN pnpm install
-RUN pnpm run build
 
-# RUN in prod mode
-CMD [ "pnpm", "run", "start:prod" ]
+WORKDIR /app
+
+COPY backend ./backend
+COPY dtos ./dtos
+COPY pnpm-workspace.yaml .
+COPY pnpm-lock.yaml .
+
+RUN pnpm install
+
+# RUN in dev mode
+CMD [ "pnpm", "--filter", "todo-backend", "run", "start" ]
