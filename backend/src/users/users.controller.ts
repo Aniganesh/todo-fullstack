@@ -42,7 +42,12 @@ export class UsersController {
     file: Express.Multer.File,
   ) {
     const response = await this.cloudinaryService.uploadFile(file);
-    return this.usersService.update(req.user.id, { profileImage: response });
+    const updateResponse = await this.usersService.update(req.user.id, {
+      profileImage: response,
+    });
+    if (updateResponse.affected) {
+      return this.usersService.get(req.user.id);
+    }
   }
 
   @Post()
@@ -50,11 +55,12 @@ export class UsersController {
   async updateUser(@Req() req, @Body() body: UpdateUser) {
     try {
       const schema = z.object({
-        name: z.string(),
+        name: z.string().nullable().optional(),
+        profileImage: z.nullable(z.any()),
       });
       schema.parse(body);
     } catch (err) {
-      throw new HttpException(err.issues.toString(), HttpStatus.BAD_REQUEST);
+      throw new HttpException(err.issues, HttpStatus.BAD_REQUEST);
     }
     const updateRes = await this.usersService.update(req.user.id, body);
     if (updateRes.affected) {

@@ -42,7 +42,7 @@ export class AuthController {
       });
       schema.parse(payload);
     } catch (err) {
-      throw new HttpException(err.issues.toString(), HttpStatus.BAD_REQUEST);
+      throw new HttpException(err.issues, HttpStatus.BAD_REQUEST);
     }
     if (payload.password)
       payload.password = await hash(
@@ -68,7 +68,7 @@ export class AuthController {
       });
       schema.parse(body);
     } catch (err) {
-      throw new HttpException(err.issues.toString(), HttpStatus.BAD_REQUEST);
+      throw new HttpException(err.issues, HttpStatus.BAD_REQUEST);
     }
     const user = await this.authService.validate(
       req.user.email,

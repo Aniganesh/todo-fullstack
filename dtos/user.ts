@@ -11,4 +11,5 @@ export type PasswordChange = {
 
 export type UpdateUser = {
   name: string;
+  profileImage?: null;
 };
