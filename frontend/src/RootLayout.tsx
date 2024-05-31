@@ -31,8 +31,7 @@ const RootLayout: FC = () => {
         <ToastContainer
           position="top-right"
           hideProgressBar
-          pauseOnHover={true}
-          autoClose={100000}
+          pauseOnHover={false}
           theme="colored"
         />
       </Await>
