@@ -22,3 +22,4 @@ If the back-end fails to start, you may need to create the "todoapp" database by
 To run the test suites, run `pnpm --filter todo-backend run test`.
 
 To run in a production environment, use the .env.prod.docker.example as your reference and run the docker-compose.prod.yaml instead of docker-compose.dev.yaml
+If you have postgres running locally on your device, you will need to stop the service in order for the backend to start. 
