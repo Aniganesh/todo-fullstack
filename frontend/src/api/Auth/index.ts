@@ -29,5 +29,5 @@ export const changePassword = async (
 };
 
 export const updateUser = (data: UpdateUser): Promise<User> => {
-  return Fetch.post({ url: "/auth/user", data });
+  return Fetch.post({ url: "/users", data });
 };
