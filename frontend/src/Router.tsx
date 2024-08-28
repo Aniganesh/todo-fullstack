@@ -9,7 +9,7 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     loader: async () => {
       const { token, fetchMe, getTodosBasedOnFilter } = useStore.getState();
-      Fetch.setCommonHeaders({ Authorization: `Bearer ${token}` }); // FIXME: Move to a different function
+      if (token) Fetch.setCommonHeaders({ Authorization: `Bearer ${token}` }); // FIXME: Move to a different function
       return defer({
         loader: Promise.all([fetchMe(), getTodosBasedOnFilter()]),
       });
